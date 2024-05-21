@@ -278,9 +278,26 @@ class Game {
 class App {
 
     constructor() {
-        this.answer = new Colour(Math.floor(256*Math.random()), Math.floor(256*Math.random()), Math.floor(256*Math.random()));
-        this.answer = new Colour(0xfb, 0xdd, 0x7e);
+        const now = new Date();
+        const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19863; // number of days of this website
+        const prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
+
+        this.answer = new Colour(Math.floor(256 * prng()), Math.floor(256 * prng()), Math.floor(256 * prng()));
+        // this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
         this.game = new Game(this.answer);
+
+    }
+
+    pseudoRNGSeeded(a) {
+        return function() {
+          a |= 0;
+          a = a + 0x9e3779b9 | 0;
+          let t = a ^ a >>> 16;
+          t = Math.imul(t, 0x21f0aaad);
+          t = t ^ t >>> 15;
+          t = Math.imul(t, 0x735a2d97);
+          return ((t = t ^ t >>> 15) >>> 0) / 4294967296;
+         }
     }
 
     mod(n, m) {

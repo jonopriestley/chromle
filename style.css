@@ -27,20 +27,39 @@
 }
 
 body {
-  background-color: #5e7777;
+  background-color: #4f5967; /* #2f4f4f, #5e7777*/
   padding: 0%;
   margin: 0%;
   color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  padding-left: 5%;
+  padding-right: 5%;
+  
 }
 
 .page-head {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 3%;
+  padding-top: 3%;
+}
+
+.title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+.day-number {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
   font-weight: bold;
-  margin-bottom: 2%;
-  padding-top: 5%;
 }
 
 #colour-wheel {
@@ -215,8 +234,6 @@ body {
   right: 0;
   text-align: center;
 }
-
-
 
 .c-range__slider {
   -webkit-appearance: none;

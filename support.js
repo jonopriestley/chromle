@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // radial-gradient(white, transparent 75%),
 
-
+// Initialise the day
+const now = new Date();
+const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19863; // number of days of this website
+document.getElementById('day-number').innerText = `Day ${day}`;
 
 const rangeInput = document.getElementById("lightness");
 const output = document.querySelector('.js-range-output');
