@@ -279,6 +279,7 @@ class App {
 
     constructor() {
         this.answer = new Colour(Math.floor(256*Math.random()), Math.floor(256*Math.random()), Math.floor(256*Math.random()));
+        this.answer = new Colour(0xfb, 0xdd, 0x7e);
         this.game = new Game(this.answer);
     }
 
