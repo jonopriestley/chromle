@@ -1,4 +1,6 @@
 
+//import { deltaE } from 'color-delta-e';
+
 class Colour {
 
     constructor(r, g, b) {
@@ -8,8 +10,11 @@ class Colour {
         this.checkRGB();
 
         this.rgb = [r, g, b];
+
         this.max_dist = this.maxEuclidDistance();
+
         this.lab = this.LabD65();
+
         this.val = `#${this.twoDigitHex(r)}${this.twoDigitHex(g)}${this.twoDigitHex(b)}`;
     }
 
@@ -57,7 +62,7 @@ class Colour {
         return Math.sqrt(d2);
     }
 
-    LabD65() {
+    LabD65Old() {
 
         // according to https://www.quora.com/What-is-mathematical-relation-between-RGB-to-LAB-image-space
         const m_old = [[0.412453, 0.357580, 0.180423],
@@ -89,6 +94,7 @@ class Colour {
         const b = 200 * ( fY - this.f(z/Zn) );
 
         //const lab = [L, a, b];
+        console.log([L, a, b]);
 
         return [L, a, b];
     }
@@ -101,10 +107,81 @@ class Colour {
         return 1/3 * t * Math.pow(d, -2) + 4 / 29;
     }
 
+    LabD65() {
+        let r = this.r / 255;
+        let g = this.g / 255;
+        let b = this.b / 255;
+
+        // assume sRGB
+        r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
+        g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
+        b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
+
+        const m = [[0.41239079926595, 0.35758433938387, 0.18048078840183],
+                    [0.21263900587151, 0.71516867876775, 0.072192315360733],
+                    [0.019330818715591, 0.11919477979462, 0.95053215224966]];
+        
+        let x = (r * m[0][0] + g * m[0][1] + b * m[0][2]) * 100;
+        let y = (r * m[1][0] + g * m[1][1] + b * m[1][2]) * 100;
+        let z = (r * m[2][0] + g * m[2][1] + b * m[2][2]) * 100;
+
+        x /= 95.047;
+        y /= 100;
+        z /= 108.883;
+
+        x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
+        y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
+        z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
+
+        let l1 = (116 * y) - 16;
+        let a1 = 500 * (x - y);
+        let b1 = 200 * (y - z);
+
+        console.log([l1, a1, b1]);
+
+        return [l1, a1, b1];
+    }
+
     Lab76Distance(other_colour) {
         "Returns the Lab euclidian distance between two RGB colours."
         let d2 = Math.pow(this.lab[0] - other_colour.lab[0], 2) + Math.pow(this.lab[1] - other_colour.lab[1], 2) + Math.pow(this.lab[2] - other_colour.lab[2], 2);
         return Math.sqrt(d2);
+    }
+
+    Lab94Distance(other_colour) {
+        const kL = 1; // graphic arts
+        const kC = 1;
+        const kH = 1;
+
+        const k1 = 0.045;
+        const k2 = 0.015;
+
+        const L1 = this.lab[0];
+        const a1 = this.lab[1];
+        const b1 = this.lab[2];
+
+        const L2 = other_colour.lab[0];
+        const a2 = other_colour.lab[1];
+        const b2 = other_colour.lab[2];
+
+        const dL = L1 - L2;
+        const C1 = Math.sqrt( a1 * a1 + b1 * b1 );
+        const C2 = Math.sqrt( a2 * a2 + b2 * b2 );
+        const dCab = C1 - C2;
+
+        const da = a1 - a2;
+        const db = b1 - b2;
+        const dHab = Math.sqrt(da * da + db * db - dCab * dCab);
+
+        const sL = 1
+        const sC = 1 + k1 * C1;
+        const sH = 1 + k2 * C1;
+
+        let dE94 = (dL / (kL * sL))  ** 2 + (dCab / (kC * sC))  ** 2 + (dHab / (kH * sH))  ** 2 
+
+        dE94 = Math.sqrt(dE94);
+
+        return dE94;
     }
 
     Lab00Distance(other_colour) {
@@ -198,6 +275,10 @@ class Game {
 
         this.mode = 'easy';
         this.jnd = 2;
+
+        //let n = new Colour(0xfb, 0xdd, 0x7e);
+        //console.log(100 - n.Lab76Distance(new Colour(0xfe, 0xdd, 0x7d)));
+        //deltaE.
     }
 
     win() {
