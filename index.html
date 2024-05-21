@@ -18,6 +18,7 @@
                 <div class="day-number" id="day-number">
                     <div></div>
                 </div>
+                <button class="button" id="mode-button" onclick="app.toggleMode()">Mode: Easy</button>
             </div>
     
             <br>
@@ -31,7 +32,6 @@
                         <div id="colour-wheel"></div>
                     </div>
                     
-                    <br>
                     <br>
                     
                     <div class="wheel-slider">
@@ -58,10 +58,9 @@
                         </div>
                     </div>
                     
-                    <br>
                     
                     <div class="circle-guess">
-                        <button id="guess-button" onclick="app.circleGuess()">Make Guess</button>
+                        <button class="button" id="guess-button" onclick="app.circleGuess()">Make Guess</button>
                     </div>
                 </div>
     
@@ -81,7 +80,7 @@
                     <br>
                     
                     <div class="picker-guess">
-                        <button id="button-1" onclick="app.pickerGuess()">Make Guess</button>
+                        <button class="button" id="button-1" onclick="app.pickerGuess()">Make Guess</button>
                     </div>
                     
                 </div>
@@ -94,7 +93,7 @@
                     <div class="best-guess-text">
                         Best Guess: &nbsp<span id="best-guess">None</span>&nbsp &nbsp
                         <br>
-                        Best Score: &nbsp<span id="best-guess-score">0</span>/100
+                        Best Score: &nbsp<span id="best-guess-score">0</span>/100 &nbsp &nbsp 
                     </div>
                     <div class="best-guess-colour">
                         <svg class="best-guess-svg">

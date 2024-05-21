@@ -33,6 +33,22 @@ body {
   color: white;
   display: flex;
   justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 10px;
+  font-size: 10pt;
+  padding: 8px 15px;
+}
+
+#mode-button {
+  width: fit-content;
+  align-self: flex-end;
+  font-size: 15pt;
 }
 
 .app {
@@ -44,22 +60,22 @@ body {
 .page-head {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
-  margin-bottom: 3%;
-  padding-top: 3%;
+  padding-top: 1%;
 }
 
 .title {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 30pt;
   font-weight: bold;
+  align-self: center;
 }
 
 .day-number {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
   font-weight: bold;
+  align-self: center;
 }
 
 #colour-wheel {
@@ -140,11 +156,11 @@ body {
 }
 
 .win {
-  margin: 1%;
   width: 100%;
-  float: left;
   display: flex;
   justify-content: center;
+  padding-top: 2%;
+  margin-top: 2%;
 }
 
 #win {
@@ -193,6 +209,7 @@ body {
 .wheel-colour-box {
   display: flex;
   justify-content: center;
+  padding-bottom: 5px;
 }
 
 .circle-guess {

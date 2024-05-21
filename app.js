@@ -192,8 +192,12 @@ class Game {
         this.num_guesses = 0;
         this.decimal_places = 2;
         this.style = 'lab';
+
         this.best_guess = null;
         this.best_score = 0;
+
+        this.mode = 'easy';
+        this.jnd = 2;
     }
 
     win() {
@@ -213,11 +217,9 @@ class Game {
         if (this.won) {
             return;
         }
-        
-        const jnd = 2; // studies say JND is 2.3 but that's quite a large gap to pick
 
         // Get guess
-        this.current_guess = guess; // TODO
+        this.current_guess = guess;
         console.log(this.current_guess.rgb);
         this.num_guesses += 1;
 
@@ -245,7 +247,7 @@ class Game {
         this.previous_guesses[this.current_score] = this.current_guess;
 
         // If the guess is within the boundary you still win.
-        if (this.current_score > 100 - jnd) {
+        if (this.current_score > 100 - this.jnd) {
             this.win();
             document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
         }
@@ -286,6 +288,23 @@ class App {
         // this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
         this.game = new Game(this.answer);
 
+    }
+
+    toggleMode() {
+        if (this.game.mode === 'easy') {
+            this.game.mode = 'hard';
+            this.game.jnd = 0;
+            document.getElementById('mode-button').innerText = 'Mode: Hard';
+        } else {
+            this.game.mode = 'easy';
+            this.game.jnd = 2;
+            document.getElementById('mode-button').innerText = 'Mode: Easy';
+
+            if (this.game.best_score > 100 - this.game.jnd) {
+                this.game.win();
+                document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
+            }
+        }
     }
 
     pseudoRNGSeeded(a) {

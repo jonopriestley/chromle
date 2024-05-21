@@ -8,6 +8,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+const buttons = document.getElementsByClassName('button');
+
+// Button mouse down
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener('mousedown', event => {
+    buttons[i].style.backgroundColor = '#bbb';
+  }
+  );
+}
+
+// Button mouse leave
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('mouseenter', event => {
+      buttons[i].style.backgroundColor = '#ddd';
+    }
+    );
+  }
+
+// Button mouse leave
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('mouseleave', event => {
+      buttons[i].style.backgroundColor = '#fff';
+    }
+    );
+  }
+
+
+
 // calc(#ff0000 * var(--lightness) / 100 * 100%)
 
 // radial-gradient(white, transparent 75%),
