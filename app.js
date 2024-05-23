@@ -1,6 +1,4 @@
 
-//import { deltaE } from 'color-delta-e';
-
 class Colour {
 
     constructor(r, g, b) {
@@ -11,11 +9,13 @@ class Colour {
 
         this.rgb = [r, g, b];
 
+        this.hsl = this.hsl();
+
         this.max_dist = this.maxEuclidDistance();
 
         this.lab = this.LabD65();
 
-        this.val = `#${this.twoDigitHex(r)}${this.twoDigitHex(g)}${this.twoDigitHex(b)}`;
+        this.hex = `#${this.twoDigitHex(r)}${this.twoDigitHex(g)}${this.twoDigitHex(b)}`;
     }
 
     checkRGB() {
@@ -34,7 +34,7 @@ class Colour {
     }
 
     isSameColour(other_colour) {
-        return (this.rgb == other_colour.rgb);
+        return (this.r === other_colour.r && this.g === other_colour.g && this.b === other_colour.b);
     }
     
     getRGB() {
@@ -94,7 +94,7 @@ class Colour {
         const b = 200 * ( fY - this.f(z/Zn) );
 
         //const lab = [L, a, b];
-        console.log([L, a, b]);
+        //console.log([L, a, b]);
 
         return [L, a, b];
     }
@@ -136,8 +136,6 @@ class Colour {
         let l1 = (116 * y) - 16;
         let a1 = 500 * (x - y);
         let b1 = 200 * (y - z);
-
-        console.log([l1, a1, b1]);
 
         return [l1, a1, b1];
     }
@@ -255,13 +253,43 @@ class Colour {
 
         return dE00;
     }
+
+    hsl() {
+        let r = this.r / 255;
+        let g = this.g / 255;
+        let b = this.b / 255;
+
+        let Cmax = Math.max(r, g, b);
+        let Cmin = Math.min(r, g, b);
+        let d = Cmax - Cmin;
+
+        let l = (Cmax + Cmin) / 2;
+        let s = (d === 0) ? 0 : d / (1 - Math.abs(2 * l - 1));
+        
+        let h;
+        if (d === 0) {
+            h = 0;
+        } else if (Cmax == r) {
+            h = 60 * this.mod(( (g - b) / d), 6);
+        } else if (Cmax == g) {
+            h = 60 * (( (b - r) / d) + 2);
+        } else if (Cmax == b) {
+            h = 60 * (( (r - g) / d) + 4);
+        }
+
+        return [h, s, l];
+    }
+
+    mod(n, m) {
+        return ((n % m) + m) % m;
+    }
 }
 
 class Game {
 
     constructor(answer) {
         this.answer = answer;
-        document.querySelector(':root').style.setProperty('--answer', answer.val);
+        document.querySelector(':root').style.setProperty('--answer', this.answer.hex);
 
         this.previous_guesses = {};
         this.current_guess = null;
@@ -275,25 +303,43 @@ class Game {
 
         this.mode = 'easy';
         this.jnd = 2;
-
-        //let n = new Colour(0xfb, 0xdd, 0x7e);
-        //console.log(100 - n.Lab76Distance(new Colour(0xfe, 0xdd, 0x7d)));
-        //deltaE.
     }
 
     win() {
-        document.getElementById('answer-svg').style.opacity = "100%";
-        document.getElementById('answer-rectangle').style.opacity = "100%";
+        this.won = true;
+
         if (this.num_guesses > 1) {
             document.getElementById('win').innerText = `Correct in ${this.num_guesses} guesses!`;
-            return;
+        } else {
+            document.getElementById('win').innerText = "Correct in 1 guess!";
         }
-        document.getElementById('win').innerText = "Correct in 1 guess!";
+
+        document.querySelector(':root').style.setProperty('--primary-bg', this.answer.hex);
+
+        // Change colour
+        let white_dist = this.answer.Lab00Distance(new Colour(0xff, 0xff, 0xff));
+        let black_dist = this.answer.Lab00Distance(new Colour(0x22, 0x22, 0x22));
+        //if (this.answer.hsl[2] <= 0.6 ) {
+        if (white_dist >= black_dist) {
+            document.querySelector(':root').style.setProperty('--colour', '#ffffff');
+        } else {
+            document.querySelector(':root').style.setProperty('--colour', '#222222');
+            document.getElementById('logo').src = "images/Chromle-dark.png";
+        }
+
+        // Get/set secondary-bg colour
+        let hsl = this.answer.hsl;
+        let l = (hsl[2] > 0.5) ? (hsl[2] - 0.06) : (hsl[2] + 0.06);
+        let [r, g, b] = this.convertHSLtoRGB(hsl[0], hsl[1], l);
+        document.querySelector(':root').style.setProperty('--secondary-bg', new Colour(r, g, b).hex);
+
+        // Make slider 160 degrees offset from the answer
+        let new_hue = Math.round((hsl[0] + 90) % 360);
+        let [r2, g2, b2] = this.convertHSLtoRGB(new_hue, 0.952, 1 - l);
+        document.querySelector(':root').style.setProperty('--colour-slider', `rgba(${r2}, ${g2}, ${b2}, 0.75)`);
     }
 
     makeGuess(guess) {
-        // Makes a move in the game
-
         // Do nothing if the game is won
         if (this.won) {
             return;
@@ -304,12 +350,6 @@ class Game {
         console.log(this.current_guess.rgb);
         this.num_guesses += 1;
 
-        // Check if it's correct
-        this.won = this.isCorrectGuess();
-        if (this.won) { // not technically needed to be done this way but it's good code practice
-            this.win();
-            return;
-        }
         // Get guess score
         this.current_score = this.getScore();
 
@@ -319,9 +359,16 @@ class Game {
         if (this.current_score > this.best_score) {
             this.best_guess = this.current_guess;
             this.best_score = this.current_score;
-            document.getElementById("best-guess").innerText = this.current_guess.rgb;
+            document.getElementById("best-guess").innerText = `${this.current_guess.r}, ${this.current_guess.g}, ${this.current_guess.b}`;
             document.getElementById("best-guess-score").innerText = Math.round(this.current_score * 100) / 100;
-            document.querySelector(':root').style.setProperty('--best-guess', this.current_guess.val);
+            document.querySelector(':root').style.setProperty('--best-guess', this.current_guess.hex);
+        }
+
+        // Check if it's correct
+        let correct = this.isCorrectGuess();
+        if (correct) { // not technically needed to be done this way but it's good code practice
+            this.win();
+            return;
         }
 
         // Add current guess to previous guesses list
@@ -330,7 +377,7 @@ class Game {
         // If the guess is within the boundary you still win.
         if (this.current_score > 100 - this.jnd) {
             this.win();
-            document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
+            document.getElementById('win').innerText += `\nYou guessed within the noticable boundary of the answer.\nThe answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
         }
         
     }
@@ -355,6 +402,27 @@ class Game {
     isCorrectGuess() {
         return this.answer.isSameColour(this.current_guess);
     }
+
+    mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
+    convertHSLtoRGB(h, s, l) {
+        let c = s * ( 1 - Math.abs(2*l - 1) );
+        let x = c * (1 - Math.abs(this.mod(h / 60, 2) - 1) );
+        let m = l - c/2;
+
+        let sector = Math.floor( this.mod(h, 360) / 60 );
+
+        let options = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
+
+        let [r, g, b] = options[sector];
+
+        [r, g, b] = [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+        
+        return [r, g, b];
+
+    }
 }
 
 
@@ -362,11 +430,12 @@ class App {
 
     constructor() {
         const now = new Date();
-        const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19863; // number of days of this website
+        const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000); // number of days since 01/01/1970
         const prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
 
         this.answer = new Colour(Math.floor(256 * prng()), Math.floor(256 * prng()), Math.floor(256 * prng()));
-        // this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
+        //this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
+        //this.answer = new Colour(0x24, 0x90, 0x8e); // 0x24, 0xdd, 0x7e, 
         this.game = new Game(this.answer);
 
     }
@@ -400,38 +469,9 @@ class App {
          }
     }
 
-    mod(n, m) {
-        return ((n % m) + m) % m;
-    }
-
-    convertHSLtoRGB(h, s, l) {
-        let c = s * ( 1 - Math.abs(2*l - 1) );
-        let x = c * (1 - Math.abs(this.mod(h / 60, 2) - 1) );
-        let m = l - c/2;
-
-        let sector = Math.floor( this.mod(h, 360) / 60 );
-
-        let options = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
-
-        let [r, g, b] = options[sector];
-
-        [r, g, b] = [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
-        
-        return [r, g, b];
-
-    }
-
-    pickerGuess() {
+    guess() {
         let guess = document.getElementById("colour-picker-input").value;
-        let r = parseInt(guess.slice(1, 3), 16);
-        let g = parseInt(guess.slice(3, 5), 16);
-        let b = parseInt(guess.slice(5), 16);
-        document.getElementById("picker-colour-output").innerText = guess; // display colour picker colour
-        this.game.makeGuess(new Colour(r, g, b));
-    }
-
-    circleGuess() {
-        let guess = document.getElementById('wheel-colour').innerText;
+        document.getElementById('colour').innerText = guess;
         let r = parseInt(guess.slice(1, 3), 16);
         let g = parseInt(guess.slice(3, 5), 16);
         let b = parseInt(guess.slice(5), 16);

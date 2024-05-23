@@ -1,11 +1,25 @@
 
+const eye = new EyeDropper();
+
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('colour-wheel').addEventListener('click', function() {
-        (new EyeDropper()).open().then(function(result) {
-            document.getElementById('wheel-colour').innerText = result.sRGBHex;
-            document.querySelector(':root').style.setProperty('--wheel-colour', result.sRGBHex);
-        });
+  document.getElementById('colour-wheel').addEventListener('mousedown', function() {
+    eye.open().then(function(result) {
+      document.getElementById('colour').innerText = result.sRGBHex;
+      document.getElementById('colour-picker-input').value = result.sRGBHex;
+      document.querySelector(':root').style.setProperty('--wheel-colour', result.sRGBHex);
     });
+  });
+});
+
+
+/*
+document.getElementById('colour-wheel').addEventListener('mouseenter', function() {
+  document.getElementById('colour-wheel').dispatchEvent(new Event('mousedown'));
+});
+*/
+
+document.addEventListener('input', function() {
+  document.getElementById('colour').innerText = document.getElementById('colour-picker-input').value;
 });
 
 
@@ -43,7 +57,7 @@ for (let i = 0; i < buttons.length; i++) {
 
 // Initialise the day
 const now = new Date();
-const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19863; // number of days of this website
+const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19864; // number of days of this website
 document.getElementById('day-number').innerText = `Day ${day}`;
 
 const rangeInput = document.getElementById("lightness");

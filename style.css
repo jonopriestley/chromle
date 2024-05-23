@@ -2,15 +2,19 @@
 
 :root {
   /* colors */
+  --primary-bg: #3f3f3f;
+  --secondary-bg: #3a3a3a;
   --wheel-diameter: 200px;
-  --wheel-colour: #ffffff;
+  --wheel-colour: var(--primary-bg);
+  --best-guess: var(--secondary-bg);
   --answer: #ffffff;
-  --best-guess: #ffffff;
+  --colour: #ffffff;
   --lightness: 50;
   --hue: 200;
   --thumb-diameter: 25;
   --color-alpha: hsl(var(--hue), 100%, calc((var(--lightness) / 100 * 100%)));
   --color-dark: hsla(var(--hue), 3%, 25%, 0.75);
+  --colour-slider: hsla(160, 95.2%, 32.4%, 0.75);
 
   /* fonts */
   --alpha-font-family: "IBM Plex Mono", monospace;
@@ -19,7 +23,7 @@
   --border-radius: 4px;
   
    /* box shadow */
-  --box-shadow: 0 0 0 1px rgba(0,0,0,.025), 0 1px 5px rgba(0, 0, 0, 0.25);
+  --box-shadow: 0 0 0 1px rgba(0,0,0,.025), 0 1px 7px rgba(0, 0, 0, 0.25);
 
   /* transitions */
   --transition-duration: 0.1s;
@@ -27,13 +31,17 @@
 }
 
 body {
-  background-color: #4f5967; /* #2f4f4f, #5e7777*/
-  padding: 0%;
-  margin: 0%;
-  color: white;
-  display: flex;
-  justify-content: center;
+  background-color: var(--primary-bg);
+  color: var(--colour);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+  width: 100%;
+	vertical-align: baseline;
+  overflow: hidden;
+  transition: background-color 2s, color 2s;
 }
 
 button {
@@ -45,38 +53,52 @@ button {
   padding: 8px 15px;
 }
 
-#mode-button {
+.header-button {
+  float: right;
+  margin-left: 17px;
+  margin-right: 17px;
+  position: relative;
   width: fit-content;
-  align-self: flex-end;
   font-size: 15pt;
+  margin-top: 1px;
 }
 
-.app {
-  padding-left: 5%;
-  padding-right: 5%;
-  
-}
 
 .page-head {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding-top: 1%;
+  background-color: var(--secondary-bg);
+  padding: 12px;
+  box-shadow: 0 1px 5px -1px black;
+  text-align: center;
+  transition: background-color 2s;
 }
 
-.title {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 30pt;
-  font-weight: bold;
-  align-self: center;
+
+.logo {
+  position: relative;
+  src: "Images/Chromle-light.png";
+  margin: 0;
+  height: 40px;
+  transition: src 2s;
 }
 
 .day-number {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 90px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
+  position: relative;
   font-weight: bold;
-  align-self: center;
+  text-align: center;
+  float: left;
 }
+
+
+.guessing {
+  display: flex;
+  justify-content: center;
+}
+
 
 #colour-wheel {
   width: var(--wheel-diameter);
@@ -87,6 +109,7 @@ button {
   outline-color: black;
   outline-width: 3px;
   outline-style: solid;
+  margin-bottom: 20px;
 }
 
 #colour-picker-input {
@@ -98,45 +121,24 @@ button {
 }
 
 .colour-picker {
-  margin-top: 10%;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
 }
 
-.picker-colour {
-  display: flex;
-  justify-content: center;
-}
-
-.picker-guess {
-  display: flex;
-  justify-content: center;
-}
 
 .score {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  font-size: 12pt;
-  font-family: Arial, Helvetica, sans-serif;
-  float: left;
   margin-top: 1%;
   font-weight: bold;
 }
 
-.wheel {
-  display: flex;
-  justify-content: center;
-}
+
 
 .best-guess {
   display: flex;
   justify-content: center;
-  float: left;
   width: 100%;
-  font-size: 12pt;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-top: 1%;
+  margin-top: 5px;
 }
 
 .best-guess-text {
@@ -157,48 +159,18 @@ button {
 }
 
 .win {
-  width: 100%;
+  padding-top: 1%;
+}
+
+.colour-text {
+  padding: 15px;
   display: flex;
   justify-content: center;
-  padding-top: 2%;
-  margin-top: 2%;
 }
 
-#win {
-  padding-top: 15px;
-}
-
-.answer-svg {
-  opacity: 0%;
-  width: 50px;
-  height: 50px;
-}
-
-.answer-rectangle {
-  opacity: 0%;
-  fill: var(--answer);
-  stroke: black;
-  stroke-width: 3px;
-  width: 50px;
-  height: 50px;
-}
-
-.wheel-colour-box-text {
-  padding-top: 15px;
-}
-
-.wheel-colour-svg {
-  width: 50px;
-  height: 50px;
-  float: right;
-}
-
-.wheel-colour-rectangle {
-  fill: var(--wheel-colour);
-  stroke: black;
-  stroke-width: 3px;
-  width: 50px;
-  height: 50px;
+.wheel {
+  display: flex;
+  justify-content: center;
 }
 
 
@@ -207,11 +179,6 @@ button {
   justify-content: center;
 }
 
-.wheel-colour-box {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 5px;
-}
 
 .circle-guess {
   display: flex;
@@ -220,22 +187,38 @@ button {
 
 .wheel-container {
   float: left;
-  width: 50%;
+  /*width: 44%;*/
+  /*padding: 3%;*/
+  padding-top: 2%;
+  align-items: center;
 }
 
-.colour-picker-container {
-  float: right;
-  width: 50%;
+.results {
+  background-color: var(--secondary-bg);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -1px 5px -2px black;
+  text-align: center;
+  transition: background-color 2s;
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
+
+
 
 .c-range {
-  position: relative;
+  position: absolute;
+  margin-top: 78px;
+  margin-left: 80px;
   width: 100%;
-  max-width: 20em;
+  max-width: 10em;
   padding: 12px 24px;
-  background-color: #7c849c;
+  /*background-color: #7c849c;*/
+  background-color: var(--secondary-bg);
   box-shadow: var(--box-shadow);  
   border-radius: var(--border-radius);
+  transform: rotate(270deg);
 }
 
 .c-range__holder {
@@ -244,6 +227,8 @@ button {
   position: relative;
 }
 
+/*
+<label class="c-range__label" for="lightness">Wheel Lightness</label>
 .c-range__label {
   position: absolute;
   font-size: 10pt;
@@ -252,6 +237,7 @@ button {
   right: 0;
   text-align: center;
 }
+*/
 
 .c-range__slider {
   -webkit-appearance: none;
@@ -271,7 +257,7 @@ button {
   width: calc(var(--thumb-diameter) * 1px);
   height: calc(var(--thumb-diameter) * 1px);
   border-radius: 50%; 
-  background: #04AA6D;
+  background: var(--colour-slider);
   cursor: pointer;
 }
 
@@ -279,7 +265,7 @@ button {
   width: calc(var(--thumb-diameter) * 1px);
   height: calc(var(--thumb-diameter) * 1px);
   border-radius: 50%;
-  background: #04AA6D;
+  background: var(--colour-slider);
   cursor: pointer;
 }
 
@@ -287,30 +273,32 @@ button {
 .c-range__output {
   opacity: 0%;
   position: absolute;
-  left: calc((var(--lightness) - 1.5) / 100 * 97%);
+  left: calc((var(--lightness) - 2.6) / 100 * 82%);
   transform: translate(calc((var(--lightness) / 100) * -50%), 0);
   width: calc(var(--thumb-diameter) * 1.2px);
-  top: -36px;
+  top: 35px;
   padding: 4px;
   font-size: 12px;
   line-height: 16px;
   text-align: center;
   border-radius: 10px;
-  background-color: var(--color-dark);
+  background-color: var(--colour-slider);
   color: white;
   transition-property: opacity;
   transition-duration: var(--transition-duration);
   transition-timing-function: var(--transition-easing);
+  transform: rotate(90deg);
 }
 
 /* little triangle */
 .c-range__output::before {
     content: "";
+    transform: rotate(90deg);
     display: block;
     position: absolute;
-    bottom: -4px;
-    left: 50%;
-    margin-left: -4px;
+    bottom: 10px;
+    left: -10px;
+    margin-left: 4px;
     width: 0;
     height: 0;
     border-style: solid;

@@ -3,92 +3,58 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Huedle</title>
+        <title>Chromle</title>
         <link rel="stylesheet" href="style.css">    
         <script src="app.js"></script>
+        <link rel="icon" href="images/favicon.ico">
     </head>
     
     <body>
-        <div class="app">
-            
-            <div class="page-head">
-                <div class="title">
-                    <div>Huedle</div>
-                </div>
-                <div class="day-number" id="day-number">
-                    <div></div>
-                </div>
-                <button class="button" id="mode-button" onclick="app.toggleMode()">Mode: Easy</button>
-            </div>
-    
-            <br>
-    
-            <div class="game">
-    
-                
+        <div class="page-head">
+            <button class="header-button button" id="mode-button" onclick="app.toggleMode()">Mode: Easy</button>
+            <div class="day-number" id="day-number"></div>
+            <img class="logo" id="logo" src="images/Chromle-light.png" >
+        </div>
+
+
+        <div class="game">
+
+            <div class="guessing">
+
                 <div class="wheel-container">
-    
                     <div class="wheel">
                         <div id="colour-wheel"></div>
-                    </div>
-                    
-                    <br>
-                    
-                    <div class="wheel-slider">
-                        <div class="c-range">  
-                            <div class="c-range__holder">    
-                                <input class="c-range__slider js-range-input" id="lightness" type="range" value="50" max="100">
-                                <output class="c-range__output js-range-output" for="lightness"></output>
+                        <div class="wheel-slider">
+                            <div class="c-range">  
+                                <div class="c-range__holder">    
+                                    <input class="c-range__slider js-range-input" id="lightness" type="range" value="50" max="100">
+                                    <output class="c-range__output js-range-output" for="lightness"></output>
+                                </div>
                             </div>
-                            <label class="c-range__label" for="lightness">Wheel Lightness</label>
                         </div>
                     </div>
-                    
-                    <br>
-                    <br>
-                    
-                    <div class="wheel-colour-box">
-                        <div class="wheel-colour-box-text">
-                            Wheel Colour: &nbsp<span id="wheel-colour">None chosen</span>&nbsp &nbsp
-                        </div>
-                        <div class="wheel-colour-box-colour">
-                            <svg class="wheel-colour-svg">
-                                <rect class="wheel-colour-rectangle" id="wheel-colour-rectangle"></rect>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="circle-guess">
-                        <button class="button" id="guess-button" onclick="app.circleGuess()">Make Guess</button>
-                    </div>
-                </div>
-    
-                <div class="colour-picker-container">
-    
+
                     <div class="colour-picker">
                         <input id="colour-picker-input" type="color">
                     </div>
                     
-                    <br>
+                    <div class="colour-text">
+                        Colour: &nbsp<output id="colour">#000000</output>&nbsp &nbsp 
+                    </div>                        
                     
-                    <div class="picker-colour">
-                        Rectangle Colour: &nbsp <span id="picker-colour-output">None chosen</span>
+                    <div class="circle-guess">
+                        <button class="button" id="guess-button" onclick="app.guess()">Make Guess</button>
                     </div>
-                    
-                    
-                    <br>
-                    
-                    <div class="picker-guess">
-                        <button class="button" id="button-1" onclick="app.pickerGuess()">Make Guess</button>
-                    </div>
-                    
+
                 </div>
-    
+            </div>
+
+            <div class="results">
+
                 <div class="score">
                     Score:&nbsp<span id="score">0</span>/100
                 </div>
-    
+
                 <div class="best-guess">
                     <div class="best-guess-text">
                         Best Guess: &nbsp<span id="best-guess">None</span>&nbsp &nbsp
@@ -101,18 +67,14 @@
                         </svg>
                     </div>
                 </div>
-    
+
                 <div class="win">
                     <span id="win"></span>&nbsp &nbsp
-                    <div class="answer-box">
-                        <svg class="answer-svg" id="answer-svg">
-                            <rect class="answer-rectangle" id="answer-rectangle"></rect>
-                        </svg>
-                    </div>
                 </div>
-    
             </div>
+
         </div>
+
         
         <script src="support.js"></script>
     </body>
