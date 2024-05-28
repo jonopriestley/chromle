@@ -46,15 +46,6 @@ body {
   transition: background-color 2s, color 2s;
 }
 
-button {
-  color: #000;
-  background-color: #fff;
-  border: 1px solid #434343;
-  border-radius: 20px;
-  font-size: 10pt;
-  padding: 8px 15px;
-}
-
 p {
 	margin: 0;
 	padding: 0;
@@ -64,7 +55,14 @@ p {
 	vertical-align: baseline;
 }
 
+
 #guess-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  font-size: 10pt;
+  padding: 8px 15px;
   justify-self: center;
 }
 
@@ -74,13 +72,43 @@ p {
 }
 
 #mode-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
   margin-left: 5px;
 }
 
-#tutorial-open-button {
-  float: left;
-  margin-left: 0px;
-  margin-right: 80px;
+path {
+  fill: var(--colour);
+}
+
+.path-button {
+  background-color: transparent;
+  border: 0;
+  float: right;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 6px;
+  padding: 0;
+}
+
+.new-game-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
+}
+
+.game-icon {
+  height: 32px;
+  width: 32px;
+}
+
+path {
+  fill: #ffffff;
 }
 
 .header-button {
@@ -89,8 +117,8 @@ p {
   margin-right: 5px;
   position: relative;
   width: fit-content;
-  font-size: 15pt;
-  margin-top: 1px;
+  font-size: 12pt;
+  margin-top: 4px;
 }
 
 
@@ -108,13 +136,12 @@ p {
   src: "Images/Chromle-light.png";
   margin: 0;
   height: 40px;
-  transition: src 2s;
+  transition: all 2s;
 }
 
 .day-number {
   padding: 5px;
-  padding-left: 10px;
-  padding-right: 20px;
+  margin-right: 50px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
   position: relative;
@@ -325,7 +352,7 @@ p {
       transparent;
 }
 
-/* Tutorial UI stuff */
+/* Tutorial UI */
 
 .tutorial {
   position: absolute;
@@ -371,6 +398,7 @@ p {
   opacity: 0;
   transform: scale(0);
   transition: opacity 0.25s, transform 0.25s;
+  color: var(--colour);
 }
 
 .tutorial-window[data-reveal="1"] {
@@ -411,6 +439,14 @@ p {
   margin-top: 10px;
 }
 
+#tutorial-close-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
+}
+
 .tutorial-image {
   height: 25px;
   vertical-align: bottom;
@@ -426,3 +462,170 @@ p {
   filter: drop-shadow(0px 10000px 0 white);
   transform: translateY(-10000px);
 }
+
+
+/* Stats UI */
+
+.stats {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+.stats[data-reveal="1"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa; /* black with some alpha */
+  z-index: 3;
+  opacity: 1;
+  display: flex;
+  pointer-events: auto;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s;
+}
+
+.stats-window {
+  padding: 24px;
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  transition: background-color 2s;
+  text-align: center;
+  animation: zoom;
+  animation-duration: 0.25s;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s, transform 0.25s;
+  color: var(--colour);
+}
+
+.stats-window[data-reveal="1"] {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.stats-title {
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: center;
+  padding: 3px;
+  text-align: left;
+}
+
+.stats-close {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#stats-close-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
+}
+
+
+/* Settings UI */
+
+.settings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+.settings[data-reveal="1"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa; /* black with some alpha */
+  z-index: 3;
+  opacity: 1;
+  display: flex;
+  pointer-events: auto;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s;
+}
+
+.settings-window {
+  padding: 24px;
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  transition: background-color 2s;
+  text-align: center;
+  animation: zoom;
+  animation-duration: 0.25s;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s, transform 0.25s;
+  color: var(--colour);
+}
+
+.settings-window[data-reveal="1"] {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.settings-title {
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: center;
+}
+
+.settings-close {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#settings-close-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
+}
+

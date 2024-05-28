@@ -309,7 +309,12 @@ class Game {
         
         // Initial set up
         document.getElementById('win-box').style.maxHeight = '50px'; // make box big enough
-        document.getElementById('win').innerText = (this.num_guesses > 1) ? `Correct in ${this.num_guesses} guesses!` : "Correct in 1 guess!";
+        document.getElementById('win-box-moves-stats').style.maxHeight = '50px'; // make box big enough
+        document.getElementById('win-box-answer-stats').style.maxHeight = '50px'; // make box big enough
+        document.getElementById('moves').innerText = (this.num_guesses > 1) ? `Correct in ${this.num_guesses} guesses!` : "Correct in 1 guess!";
+        document.getElementById('moves-stats').innerText = document.getElementById('moves').innerText;
+        document.getElementById('answer').innerText = `The answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
+        document.getElementById('answer-stats').innerText = document.getElementById('answer').innerText;
         document.querySelector(':root').style.setProperty('--bg-primary', this.answer.hex);
 
         // Change colour
@@ -328,6 +333,11 @@ class Game {
         const new_hue = (hsl[0] + 90) % 360;
         const [r2, g2, b2] = this.convertHSLtoRGB(new_hue, 0.952, 1 - l);
         document.querySelector(':root').style.setProperty('--colour-slider', `rgba(${r2}, ${g2}, ${b2}, 0.75)`);
+
+        // Open stats
+        this.stats_display = true;
+        document.getElementById('stats-overlay').dataset.reveal = '1';
+        document.getElementById('stats-ui').dataset.reveal = '1';
     }
 
     makeGuess(guess) {
@@ -350,8 +360,10 @@ class Game {
         if (this.current_score > this.best_score) {
             this.best_guess = this.current_guess; 
             this.best_score = this.current_score;
-            document.getElementById("best-guess").innerText = `${this.current_guess.r}, ${this.current_guess.g}, ${this.current_guess.b}`;
+            document.getElementById("best-guess").innerText = this.current_guess.hex;
+            document.getElementById("best-guess-stats").innerText = document.getElementById("best-guess").innerText;
             document.getElementById("best-guess-score").innerText = Math.round(this.current_score * 100) / 100;
+            document.getElementById("best-guess-score-stats").innerText = document.getElementById("best-guess-score").innerText;
             document.querySelector(':root').style.setProperty('--best-guess', this.current_guess.hex);
         }
 
@@ -368,7 +380,6 @@ class Game {
         // If the guess is within the boundary you still win.
         if (this.current_score > 100 - this.jnd) {
             this.win();
-            document.getElementById('win').innerText += `\nThe answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
         }
         
     }
@@ -443,15 +454,18 @@ class App {
     }
 
     emptySettings() {
+        document.querySelector(':root').style.setProperty('--colour-slider', "hsla(160, 95.2%, 32.4%, 0.75)");
+        document.querySelector(':root').style.setProperty('--best-guess', 'var(--bg-secondary)');
         document.getElementById('colour-picker-input').value = '#000000';
         document.getElementById('colour').innerText = '#000000';
-        document.querySelector(':root').style.setProperty('--best-guess', 'var(--bg-secondary)');
-        document.getElementById('win').innerText = '';
+        document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
+        document.getElementById('moves').innerText = '';
+        document.getElementById('answer').innerText = '';
         document.getElementById('best-guess').innerText = 'None';
         document.getElementById('best-guess-score').innerText = '0';
         document.getElementById('score').innerText = '0';
-        document.querySelector(':root').style.setProperty('--colour-slider', "hsla(160, 95.2%, 32.4%, 0.75)");
-        document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
+        document.getElementById('logo').src = 'images/Chromle-light.png';
+        this.closeOverlays();
     }
     
     initialiseSettings() {
@@ -531,15 +545,28 @@ class App {
         document.getElementById('tutorial-ui').dataset.reveal = '1';
     }
 
+    openStats() {
+        this.stats_display = true;
+        document.getElementById('stats-overlay').dataset.reveal = '1';
+        document.getElementById('stats-ui').dataset.reveal = '1';
+    }
+
+    openSettings() {
+        this.settings_display = true;
+        document.getElementById('settings-overlay').dataset.reveal = '1';
+        document.getElementById('settings-ui').dataset.reveal = '1';
+    }
+
     closeOverlays() {
         [this.tutorial_display, this.settings_display, this.stats_display] = [false, false, false];
         document.getElementById('tutorial-overlay').dataset.reveal = '0';
         document.getElementById('tutorial-ui').dataset.reveal = '0';
-        //document.getElementById('settings-overlay').dataset.reveal = '0';
-        //document.getElementById('settings-ui').dataset.reveal = '0';
-        //document.getElementById('stats-overlay').dataset.reveal = '0';
-        //document.getElementById('stats-ui').dataset.reveal = '0';
+        document.getElementById('stats-overlay').dataset.reveal = '0';
+        document.getElementById('stats-ui').dataset.reveal = '0';
+        document.getElementById('settings-overlay').dataset.reveal = '0';
+        document.getElementById('settings-ui').dataset.reveal = '0';
     }
 }
 
 let app = new App();
+
