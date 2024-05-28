@@ -66,26 +66,93 @@ const output = document.querySelector('.js-range-output');
 const root = document.documentElement;
 
 function setLightness() {
-    output.value = rangeInput.value + '%';
-    root.style.setProperty('--lightness', rangeInput.value);
+  output.value = rangeInput.value + '%';
+  root.style.setProperty('--lightness', rangeInput.value);
+  setPickerLightness();
+}
+
+function setPickerLightness() {
+  let hex = document.getElementById('colour-picker-input').value;
+  let [h, s, l] = hexToHSL(hex);
+  l = rangeInput.value / 100;
+  document.getElementById('colour-picker-input').value = hslToHex(h, s, l);
 }
 
 function setDefaultState() {
-    rangeInput.focus();
-    setLightness();
+  rangeInput.focus();
+  setLightness();
 }
 
 rangeInput.addEventListener('input', function(){
-    output.style.opacity = '100%'; // Set the opacity of the slider percentage display to fully opaque when it's in use
-    setLightness();
+  output.style.opacity = '100%'; // Set the opacity of the slider percentage display to be visible only when it's in use
+  setLightness();
 });
 
 document.addEventListener('DOMContentLoaded', function(){
-    setDefaultState();
+  setDefaultState();
 });
 
 // Set the opacity of the slider percentage display to clear when it's not being used
 document.addEventListener('click', function() {
-    output.style.opacity = '0%';
+  output.style.opacity = '0%';
 });
 
+const picker = document.getElementById('colour-picker-input').addEventListener('input', function() {
+  let hex = document.getElementById('colour-picker-input').value;
+  let [h, s, l] = hexToHSL(hex);
+  document.getElementById("lightness").value = Math.round(100 * l);
+});
+
+function mod(n, m) {
+  return ((n % m) + m) % m;
+}
+
+function hexToHSL(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let r = parseInt(result[1], 16) / 255;
+  let g = parseInt(result[2], 16) / 255;
+  let b = parseInt(result[3], 16) / 255;
+
+  let Cmax = Math.max(r, g, b);
+  let Cmin = Math.min(r, g, b);
+  let d = Cmax - Cmin;
+
+  let l = (Cmax + Cmin) / 2;
+  let s = (d === 0) ? 0 : d / (1 - Math.abs(2 * l - 1));
+  
+  let h;
+  if (d === 0) {
+      h = 0;
+  } else if (Cmax == r) {
+      h = 60 * mod(( (g - b) / d), 6);
+  } else if (Cmax == g) {
+      h = 60 * (( (b - r) / d) + 2);
+  } else if (Cmax == b) {
+      h = 60 * (( (r - g) / d) + 4);
+  }
+
+  return [h, s, l];
+}
+
+function hslToHex(h, s, l) {
+  let c = s * ( 1 - Math.abs(2*l - 1) );
+  let x = c * (1 - Math.abs(mod(h / 60, 2) - 1) );
+  let m = l - c/2;
+
+  let sector = Math.floor( mod(h, 360) / 60 );
+
+  let options = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
+
+  let [r, g, b] = options[sector];
+  [r, g, b] = [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+
+  return `#${twoDigitHex(r)}${twoDigitHex(g)}${twoDigitHex(b)}`;
+}
+
+function twoDigitHex(value) {
+  value = value.toString(16);
+  while (value.length < 2) {
+      value = '0'.concat(value);
+  }
+  return value;
+}

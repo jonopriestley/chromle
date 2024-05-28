@@ -456,8 +456,9 @@ class App {
     emptySettings() {
         document.querySelector(':root').style.setProperty('--colour-slider', "hsla(160, 95.2%, 32.4%, 0.75)");
         document.querySelector(':root').style.setProperty('--best-guess', 'var(--bg-secondary)');
-        document.getElementById('colour-picker-input').value = '#000000';
-        document.getElementById('colour').innerText = '#000000';
+        document.getElementById('colour-picker-input').value = '#808080';
+        document.getElementById('colour').innerText = '#808080';
+        document.getElementById('lightness').value = '50';
         document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
         document.getElementById('moves').innerText = '';
         document.getElementById('answer').innerText = '';
@@ -529,6 +530,11 @@ class App {
     setToBestGuess() {
         document.getElementById("colour-picker-input").value = this.game.best_guess.hex;
         document.getElementById("colour").innerText = this.game.best_guess.hex;
+        // Set slider and colour wheel lightness to best guess lightness
+        let [r, g, b] = this.game.best_guess.rgb;
+        let l = Math.round((Math.max(r, g, b) + Math.min(r, g, b)) / (2 * 255));
+        document.getElementById("lightness").value = 100 * l;
+        document.querySelector(':root').style.setProperty('--lightness', 100 * l);
     }
 
     twoDigitHex(value) {
