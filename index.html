@@ -13,40 +13,44 @@
         <div class="page-head">
             <button class="header-button button" id="mode-button" onclick="app.toggleMode()">Mode: Easy</button>
             <div class="day-number" id="day-number"></div>
-            <img class="logo" id="logo" src="images/Chromle-light.png" >
+            <button class="header-button tutorial-button button" id="tutorial-open-button" onclick="app.openTutorial()">Tutorial</button>
+            <button class="header-button new-game-button button" id="new-game-button" onclick="app.newGame()">New Game</button>
+            <img class="logo" id="logo" src="images/Chromle-light.png">
         </div>
-
 
         <div class="game">
 
             <div class="guessing">
-
-                <div class="wheel-container">
-                    <div class="wheel">
-                        <div id="colour-wheel"></div>
-                        <div class="wheel-slider">
-                            <div class="c-range">  
-                                <div class="c-range__holder">    
-                                    <input class="c-range__slider js-range-input" id="lightness" type="range" value="50" max="100">
-                                    <output class="c-range__output js-range-output" for="lightness"></output>
-                                </div>
-                            </div>
+                <div class="wheel">
+                    <div id="colour-wheel"></div>
+                </div>
+                
+                <div class="wheel-slider">
+                    <div class="c-range">  
+                        <div class="c-range__holder">    
+                            <input class="c-range__slider js-range-input" id="lightness" type="range" value="50" max="100">
+                            <output class="c-range__output js-range-output" for="lightness"></output>
                         </div>
                     </div>
-
-                    <div class="colour-picker">
-                        <input id="colour-picker-input" type="color">
-                    </div>
-                    
-                    <div class="colour-text">
-                        Colour: &nbsp<output id="colour">#000000</output>&nbsp &nbsp 
-                    </div>                        
-                    
-                    <div class="circle-guess">
-                        <button class="button" id="guess-button" onclick="app.guess()">Make Guess</button>
-                    </div>
-
                 </div>
+
+                <div class="colour-picker">
+                    <input id="colour-picker-input" type="color">
+                </div>
+                
+                <div class="colour-text">
+                    Colour: &nbsp<output id="colour">#000000</output>&nbsp &nbsp 
+                </div>  
+                
+                <div class="guess">
+                    <button class="guess-button button" id="guess-button" onclick="app.guess()">Make Guess</button>
+                </div>
+                
+                <!--
+                <div class="circle-guess">
+                    <button class="button" id="guess-button" onclick="app.guess()">Make Guess</button>
+                </div>
+                -->
             </div>
 
             <div class="results">
@@ -61,19 +65,51 @@
                         <br>
                         Best Score: &nbsp<span id="best-guess-score">0</span>/100 &nbsp &nbsp 
                     </div>
-                    <div class="best-guess-colour">
+                    <div class="best-guess-colour" id="best-guess-colour" onclick="app.setToBestGuess()">
                         <svg class="best-guess-svg">
                             <rect class="best-guess-rectangle" id="best-guess-rectangle"></rect>
                         </svg>
                     </div>
                 </div>
 
-                <div class="win">
+                <div class="win-box" id="win-box">
                     <span id="win"></span>&nbsp &nbsp
                 </div>
             </div>
 
         </div>
+
+        <div class="tutorial" id="tutorial-overlay" data-reveal="0">
+            <div class="tutorial-window" id="tutorial-ui" data-reveal="0">
+                <h1 class="tutorial-title">How to Play</h1>
+                <div class="tutorial-row">
+                    <img class="tutorial-image" id="question-mark" src="images/question_mark.png">
+                    <p class="tutorial-text">The aim of the game is to find the mystery colour</p>
+                </div>
+                <div class="tutorial-row">
+                    <p class="tutorial-text">Use the colour wheel or box to pick a colour</p>
+                </div>
+                <div class="tutorial-row">
+                    <img class="tutorial-image" id="cursor" src="images/cursor.png">
+                    <p class="tutorial-text">Click the 'Make Guess' button to make a guess</p>
+                </div>
+                <div class="tutorial-row">
+                    <p class="tutorial-text">The higher the score, the better the guess</p>
+                </div>
+                <div class="tutorial-row">
+                    <img class="tutorial-image" id="square" src="images/square.png">
+                    <p class="tutorial-text">Click the best guess box to jump back to it</p>
+                </div>
+                <div class="tutorial-row">
+                    <img class="tutorial-image" id="percent" src="images/percent.png">
+                    <p class="tutorial-text">Easy mode only needs to score 98 to win. Hard is 100!</p>
+                </div>
+                <div class="tutorial-close">
+                    <button class="header-button tutorial-button button" id="tutorial-close-button" onclick="app.closeOverlays()">Close</button>
+                </div>
+            </div>
+        </div>
+
 
         
         <script src="support.js"></script>

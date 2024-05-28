@@ -289,7 +289,6 @@ class Game {
 
     constructor(answer) {
         this.answer = answer;
-        document.querySelector(':root').style.setProperty('--answer', this.answer.hex);
 
         this.previous_guesses = {};
         this.current_guess = null;
@@ -307,35 +306,27 @@ class Game {
 
     win() {
         this.won = true;
-
-        if (this.num_guesses > 1) {
-            document.getElementById('win').innerText = `Correct in ${this.num_guesses} guesses!`;
-        } else {
-            document.getElementById('win').innerText = "Correct in 1 guess!";
-        }
-
-        document.querySelector(':root').style.setProperty('--primary-bg', this.answer.hex);
+        
+        // Initial set up
+        document.getElementById('win-box').style.maxHeight = '50px'; // make box big enough
+        document.getElementById('win').innerText = (this.num_guesses > 1) ? `Correct in ${this.num_guesses} guesses!` : "Correct in 1 guess!";
+        document.querySelector(':root').style.setProperty('--bg-primary', this.answer.hex);
 
         // Change colour
-        let white_dist = this.answer.Lab00Distance(new Colour(0xff, 0xff, 0xff));
-        let black_dist = this.answer.Lab00Distance(new Colour(0x22, 0x22, 0x22));
-        //if (this.answer.hsl[2] <= 0.6 ) {
-        if (white_dist >= black_dist) {
-            document.querySelector(':root').style.setProperty('--colour', '#ffffff');
-        } else {
-            document.querySelector(':root').style.setProperty('--colour', '#222222');
-            document.getElementById('logo').src = "images/Chromle-dark.png";
-        }
+        const white_dist = this.answer.Lab00Distance(new Colour(0xff, 0xff, 0xff));
+        const black_dist = this.answer.Lab00Distance(new Colour(0x22, 0x22, 0x22));
+        document.querySelector(':root').style.setProperty('--colour', (white_dist >= black_dist) ? '#ffffff' : '#222222');
+        document.getElementById('logo').src = (white_dist >= black_dist) ? "images/Chromle-light.png" : "images/Chromle-dark.png";
 
         // Get/set secondary-bg colour
-        let hsl = this.answer.hsl;
-        let l = (hsl[2] > 0.5) ? (hsl[2] - 0.06) : (hsl[2] + 0.06);
-        let [r, g, b] = this.convertHSLtoRGB(hsl[0], hsl[1], l);
-        document.querySelector(':root').style.setProperty('--secondary-bg', new Colour(r, g, b).hex);
+        const hsl = this.answer.hsl;
+        const l = (hsl[2] > 0.5) ? (hsl[2] - 0.06) : (hsl[2] + 0.06);
+        const [r, g, b] = this.convertHSLtoRGB(hsl[0], hsl[1], l);
+        document.querySelector(':root').style.setProperty('--bg-secondary', new Colour(r, g, b).hex);
 
         // Make slider 160 degrees offset from the answer
-        let new_hue = Math.round((hsl[0] + 90) % 360);
-        let [r2, g2, b2] = this.convertHSLtoRGB(new_hue, 0.952, 1 - l);
+        const new_hue = (hsl[0] + 90) % 360;
+        const [r2, g2, b2] = this.convertHSLtoRGB(new_hue, 0.952, 1 - l);
         document.querySelector(':root').style.setProperty('--colour-slider', `rgba(${r2}, ${g2}, ${b2}, 0.75)`);
     }
 
@@ -357,7 +348,7 @@ class Game {
         document.getElementById("score").innerText = Math.round(this.current_score * 100) / 100; // rounded to 2dp
 
         if (this.current_score > this.best_score) {
-            this.best_guess = this.current_guess;
+            this.best_guess = this.current_guess; 
             this.best_score = this.current_score;
             document.getElementById("best-guess").innerText = `${this.current_guess.r}, ${this.current_guess.g}, ${this.current_guess.b}`;
             document.getElementById("best-guess-score").innerText = Math.round(this.current_score * 100) / 100;
@@ -377,7 +368,7 @@ class Game {
         // If the guess is within the boundary you still win.
         if (this.current_score > 100 - this.jnd) {
             this.win();
-            document.getElementById('win').innerText += `\nYou guessed within the noticable boundary of the answer.\nThe answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
+            document.getElementById('win').innerText += `\nThe answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
         }
         
     }
@@ -425,19 +416,62 @@ class Game {
     }
 }
 
-
 class App {
 
     constructor() {
         const now = new Date();
         const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000); // number of days since 01/01/1970
-        const prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
+        this.prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
+        
+        this.initialised = false;
+        this.newGame();
+    }
 
-        this.answer = new Colour(Math.floor(256 * prng()), Math.floor(256 * prng()), Math.floor(256 * prng()));
-        //this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
-        //this.answer = new Colour(0x24, 0x90, 0x8e); // 0x24, 0xdd, 0x7e, 
+    newGame() {
+        if (!this.initialised) this.initialised = true;
+        else if (!this.game.won) return;
+        else this.emptySettings();
+
+        /* 
+        this.answer = new Colour(Math.floor(256 * Math.random()), Math.floor(256 * Math.random()), Math.floor(256 * Math.random()));
+        this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
+        this.answer = new Colour(0x24, 0x90, 0x8e); // 0x24, 0xdd, 0x7e,
+        */
+        this.answer = new Colour(Math.floor(256 * this.prng()), Math.floor(256 * this.prng()), Math.floor(256 * this.prng()));
         this.game = new Game(this.answer);
+        this.initialiseSettings();
+    }
 
+    emptySettings() {
+        document.getElementById('colour-picker-input').value = '#000000';
+        document.getElementById('colour').innerText = '#000000';
+        document.querySelector(':root').style.setProperty('--best-guess', 'var(--bg-secondary)');
+        document.getElementById('win').innerText = '';
+        document.getElementById('best-guess').innerText = 'None';
+        document.getElementById('best-guess-score').innerText = '0';
+        document.getElementById('score').innerText = '0';
+        document.querySelector(':root').style.setProperty('--colour-slider', "hsla(160, 95.2%, 32.4%, 0.75)");
+        document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
+    }
+    
+    initialiseSettings() {
+        // Primary original background color
+        let bg_primary = getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg-primary-original');
+        document.querySelector(':root').style.setProperty('--bg-primary', bg_primary);
+        
+        // Secondary original background color
+        let bg_secondary = getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg-secondary-original');
+        document.querySelector(':root').style.setProperty('--bg-secondary', bg_secondary);
+        
+        // Foreground color
+        let [r, g, b] = [parseInt(bg_primary.slice(1, 3), 16), parseInt(bg_primary.slice(3, 5), 16), parseInt(bg_primary.slice(5, 7), 16)];
+        bg_primary = new Colour(r, g, b);
+        let colour = ( bg_primary.Lab00Distance(new Colour(0, 0, 0)) < bg_primary.Lab00Distance(new Colour(255, 255, 255)) ) ? '#ffffff' : '#222222';
+        document.querySelector(':root').style.setProperty('--colour', colour);
+
+        this.tutorial_display = false; // if tutorial is displayed
+        this.settings_display = false; // if settings are displayed
+        this.stats_display = false; // if stats are displayed
     }
 
     toggleMode() {
@@ -459,14 +493,14 @@ class App {
 
     pseudoRNGSeeded(a) {
         return function() {
-          a |= 0;
-          a = a + 0x9e3779b9 | 0;
-          let t = a ^ a >>> 16;
-          t = Math.imul(t, 0x21f0aaad);
-          t = t ^ t >>> 15;
-          t = Math.imul(t, 0x735a2d97);
-          return ((t = t ^ t >>> 15) >>> 0) / 4294967296;
-         }
+            a |= 0;                           // convert to 32 bit signed int
+            a = a + 0x9e3779b9 | 0;           // a = (a + (2**32 / phi)) | 0 --> 0x9e3779b9 is coprime to 2^32
+            let t = a ^ a >>> 16;             // t(0:15) = a(0:15), t(16:31) = a(16:31) ^ a(16:31)
+            t = Math.imul(t, 0x21f0aaad);     // multiply by a big prime number to mess it around
+            t = t ^ t >>> 15;                 // t(15:31) = t(15:31) ^ a(15:31)
+            t = Math.imul(t, 0x735a2d97);     // multiply by a big prime number to mess it around
+            return ((t = t ^ t >>> 15) >>> 0) / 4294967296; // 
+        }
     }
 
     guess() {
@@ -478,14 +512,34 @@ class App {
         this.game.makeGuess(new Colour(r, g, b));
     }
 
+    setToBestGuess() {
+        document.getElementById("colour-picker-input").value = this.game.best_guess.hex;
+        document.getElementById("colour").innerText = this.game.best_guess.hex;
+    }
 
+    twoDigitHex(value) {
+        value = value.toString(16);
+        while (value.length < 2) {
+            value = '0'.concat(value);
+        }
+        return value;
+    }
 
-    // conic-gradient(from 90deg, #e43f00, #e70d86, #6b0efd, #09adff, #55cc3b, #fae410, #e43f00)
-    // radial-gradient(white, transparent 80%),
+    openTutorial() {
+        this.tutorial_display = true;
+        document.getElementById('tutorial-overlay').dataset.reveal = '1';
+        document.getElementById('tutorial-ui').dataset.reveal = '1';
+    }
 
-    // background single colour black - white depending on slider
-    // multiply by colour wheel
-    // TODO --> how the heck do you make a colour wheel? function that makes an instance of the wheel ony needs to be run once with L = 50.
+    closeOverlays() {
+        [this.tutorial_display, this.settings_display, this.stats_display] = [false, false, false];
+        document.getElementById('tutorial-overlay').dataset.reveal = '0';
+        document.getElementById('tutorial-ui').dataset.reveal = '0';
+        //document.getElementById('settings-overlay').dataset.reveal = '0';
+        //document.getElementById('settings-ui').dataset.reveal = '0';
+        //document.getElementById('stats-overlay').dataset.reveal = '0';
+        //document.getElementById('stats-ui').dataset.reveal = '0';
+    }
 }
 
 let app = new App();

@@ -2,7 +2,7 @@
 const eye = new EyeDropper();
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('colour-wheel').addEventListener('mousedown', function() {
+  document.getElementById('colour-wheel').addEventListener('click', function() {
     eye.open().then(function(result) {
       document.getElementById('colour').innerText = result.sRGBHex;
       document.getElementById('colour-picker-input').value = result.sRGBHex;
@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+document.addEventListener('resize', function() {
+  let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
+  document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
+});
+
+let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
+document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
 
 /*
 document.getElementById('colour-wheel').addEventListener('mouseenter', function() {
@@ -49,15 +56,9 @@ for (let i = 0; i < buttons.length; i++) {
     );
   }
 
-
-
-// calc(#ff0000 * var(--lightness) / 100 * 100%)
-
-// radial-gradient(white, transparent 75%),
-
 // Initialise the day
 const now = new Date();
-const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19864; // number of days of this website
+const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19870; // number of days of this website
 document.getElementById('day-number').innerText = `Day ${day}`;
 
 const rangeInput = document.getElementById("lightness");
@@ -87,3 +88,4 @@ document.addEventListener('DOMContentLoaded', function(){
 document.addEventListener('click', function() {
     output.style.opacity = '0%';
 });
+

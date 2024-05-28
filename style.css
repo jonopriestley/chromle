@@ -2,11 +2,13 @@
 
 :root {
   /* colors */
-  --primary-bg: #3f3f3f;
-  --secondary-bg: #3a3a3a;
+  --bg-primary-original: #3f3f3f;
+  --bg-primary: var(--bg-primary-original);
+  --bg-secondary-original: #3a3a3a;
+  --bg-secondary: var(--bg-secondary-original);
   --wheel-diameter: 200px;
-  --wheel-colour: var(--primary-bg);
-  --best-guess: var(--secondary-bg);
+  --wheel-colour: var(--bg-primary);
+  --best-guess: var(--bg-secondary);
   --answer: #ffffff;
   --colour: #ffffff;
   --lightness: 50;
@@ -31,7 +33,7 @@
 }
 
 body {
-  background-color: var(--primary-bg);
+  background-color: var(--bg-primary);
   color: var(--colour);
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
@@ -48,15 +50,43 @@ button {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 10pt;
   padding: 8px 15px;
 }
 
+p {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+#guess-button {
+  justify-self: center;
+}
+
+.guess {
+  display: flex;
+  justify-content: center;
+}
+
+#mode-button {
+  margin-left: 5px;
+}
+
+#tutorial-open-button {
+  float: left;
+  margin-left: 0px;
+  margin-right: 80px;
+}
+
 .header-button {
   float: right;
-  margin-left: 17px;
-  margin-right: 17px;
+  margin-left: 5px;
+  margin-right: 5px;
   position: relative;
   width: fit-content;
   font-size: 15pt;
@@ -65,13 +95,13 @@ button {
 
 
 .page-head {
-  background-color: var(--secondary-bg);
+  background-color: var(--bg-secondary);
   padding: 12px;
   box-shadow: 0 1px 5px -1px black;
   text-align: center;
   transition: background-color 2s;
+  margin-bottom: 2%;
 }
-
 
 .logo {
   position: relative;
@@ -84,7 +114,7 @@ button {
 .day-number {
   padding: 5px;
   padding-left: 10px;
-  padding-right: 90px;
+  padding-right: 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
   position: relative;
@@ -93,14 +123,13 @@ button {
   float: left;
 }
 
-
 .guessing {
-  display: flex;
+  display: inline;
   justify-content: center;
 }
 
-
 #colour-wheel {
+  justify-self: center;
   width: var(--wheel-diameter);
   height: var(--wheel-diameter);
   background: radial-gradient(hsl(0, 0%, calc(var(--lightness) / 100 * 100%)), transparent 75%),
@@ -115,7 +144,8 @@ button {
 #colour-picker-input {
   width: calc(var(--wheel-diameter));
   height: calc(var(--wheel-diameter) / 3);
-  border-radius: 5px;
+  border-radius: 5px;width: calc(var(--wheel-diameter));
+  /*border: 10px solid red;*/
   border-color: transparent;
   background-color: white;
 }
@@ -126,13 +156,10 @@ button {
   justify-content: center;
 }
 
-
 .score {
-  margin-top: 1%;
   font-weight: bold;
+  margin-top: 5px;
 }
-
-
 
 .best-guess {
   display: flex;
@@ -156,11 +183,9 @@ button {
   stroke-width: 3px;
   width: 50px;
   height: 50px;
+  transition: fill 2s;
 }
 
-.win {
-  padding-top: 1%;
-}
 
 .colour-text {
   padding: 15px;
@@ -173,52 +198,44 @@ button {
   justify-content: center;
 }
 
-
 .wheel-slider {
   display: flex;
   justify-content: center;
 }
-
 
 .circle-guess {
   display: flex;
   justify-content: center;
 }
 
-.wheel-container {
-  float: left;
-  /*width: 44%;*/
-  /*padding: 3%;*/
-  padding-top: 2%;
-  align-items: center;
-}
-
 .results {
-  background-color: var(--secondary-bg);
+  background-color: var(--bg-secondary);
   position: absolute;
   bottom: 0;
   width: 100%;
   box-shadow: 0 -1px 5px -2px black;
   text-align: center;
   transition: background-color 2s;
-  padding-bottom: 20px;
+  padding-bottom: 13px;
   padding-top: 10px;
 }
 
-
+#win-box {
+  max-height: 0px;
+  padding-top: 5px;
+}
 
 .c-range {
-  position: absolute;
-  margin-top: 78px;
-  margin-left: 80px;
-  width: 100%;
-  max-width: 10em;
+  position: relative;
+  margin-bottom: 10px;
+  width: calc(var(--wheel-diameter) / 1.3);
+  /*max-width: var(--wheel-diameter);*/
   padding: 12px 24px;
-  /*background-color: #7c849c;*/
-  background-color: var(--secondary-bg);
+  background-color: var(--bg-secondary);
   box-shadow: var(--box-shadow);  
   border-radius: var(--border-radius);
-  transform: rotate(270deg);
+  /*transform: rotate(270deg);*/
+  transition: background-color 2s;
 }
 
 .c-range__holder {
@@ -259,6 +276,7 @@ button {
   border-radius: 50%; 
   background: var(--colour-slider);
   cursor: pointer;
+  transition: background 2s;
 }
 
 .c-range__slider::-moz-range-thumb {
@@ -273,7 +291,7 @@ button {
 .c-range__output {
   opacity: 0%;
   position: absolute;
-  left: calc((var(--lightness) - 2.6) / 100 * 82%);
+  left: calc((var(--lightness) - 2.6) / 100 * 95%);
   transform: translate(calc((var(--lightness) / 100) * -50%), 0);
   width: calc(var(--thumb-diameter) * 1.2px);
   top: 35px;
@@ -287,23 +305,124 @@ button {
   transition-property: opacity;
   transition-duration: var(--transition-duration);
   transition-timing-function: var(--transition-easing);
-  transform: rotate(90deg);
+  /*transform: rotate(90deg);*/
 }
 
 /* little triangle */
 .c-range__output::before {
     content: "";
-    transform: rotate(90deg);
+    transform: rotate(180deg);
     display: block;
     position: absolute;
-    bottom: 10px;
-    left: -10px;
+    bottom: 24px;
+    left: 10px;
     margin-left: 4px;
     width: 0;
     height: 0;
     border-style: solid;
     border-width: 4px 4px 0 4px;
-    border-color: var(--color-dark) transparent transparent
+    border-color: var(--colour-slider) transparent transparent
       transparent;
 }
 
+/* Tutorial UI stuff */
+
+.tutorial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+.tutorial[data-reveal="1"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000aa; /* black with some alpha */
+  z-index: 3;
+  opacity: 1;
+  display: flex;
+  pointer-events: auto;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s;
+}
+
+.tutorial-window {
+  padding: 24px;
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  transition: background-color 2s;
+  text-align: center;
+  animation: zoom;
+  animation-duration: 0.25s;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.tutorial-window[data-reveal="1"] {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.tutorial-title {
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.tutorial-row {
+  text-align: left;
+}
+
+.tutorial-text {
+  display:inline-block;
+  position: relative;
+  padding: 6px;
+  padding-left: 2px;
+  /*bottom: 6px;*/
+  font-size: clamp(50%, 2.5vw, 100%);
+
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;   
+  -o-user-select: none; 
+}
+
+.tutorial-close {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.tutorial-image {
+  height: 25px;
+  vertical-align: bottom;
+  padding-bottom: 3px;
+}
+
+#square {
+  filter: drop-shadow(0px 10000px 0 white);
+  transform: translateY(-10000px);
+}
+
+#percent {
+  filter: drop-shadow(0px 10000px 0 white);
+  transform: translateY(-10000px);
+}
