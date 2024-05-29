@@ -130,6 +130,7 @@ const picker = document.getElementById('colour-picker-input').addEventListener('
   let [r, g, b] = [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[2], 16)]; // convert to integers
   let l = ( Math.max(r, g, b) + Math.min(r, g, b) ) / (2 * 255); // get lightness
   document.getElementById("lightness").value = Math.round(100 * l); // set slider value to match picker
+  root.style.setProperty('--lightness', Math.round(100 * l));
 });
 
 /* ----------------------------------------------------------- */

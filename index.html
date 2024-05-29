@@ -54,29 +54,23 @@
                     <input id="colour-picker-input" type="color">
                 </div>
                 
-                <div class="colour-text">
+                <div class="colour-text" id="colour-text">
                     Colour: &nbsp<output id="colour">#808080</output>&nbsp &nbsp 
                 </div>  
                 
                 <div class="guess">
                     <button class="guess-button button" id="guess-button" onclick="app.guess()">Make Guess</button>
                 </div>
-                
-                <!--
-                <div class="circle-guess">
-                    <button class="button" id="guess-button" onclick="app.guess()">Make Guess</button>
-                </div>
-                -->
             </div>
 
-            <div class="results">
+            <div class="results" id="results">
 
-                <div class="score">
+                <div class="score-box" id="score-box">
                     Score:&nbsp<span id="score">0</span>/100
                 </div>
 
                 <div class="best-guess">
-                    <div class="best-guess-text">
+                    <div class="best-guess-text" id="best-guess-text">
                         Best Guess: &nbsp<span id="best-guess">None</span>&nbsp &nbsp
                         <br>
                         Best Score: &nbsp<span id="best-guess-score">0</span>/100 &nbsp &nbsp 

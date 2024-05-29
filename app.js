@@ -293,6 +293,7 @@ class Game {
         this.previous_guesses = {};
         this.current_guess = null;
         this.won = false;
+        this.lost = false;
         this.num_guesses = 0;
         this.decimal_places = 2;
         this.style = 'lab';
@@ -302,16 +303,14 @@ class Game {
 
         this.mode = 'easy';
         this.jnd = 2;
+        this.max_guesses = 30; // maximum number of guesses on hard mode
     }
 
-    win() {
-        this.won = true;
-        
+    gameEnd() {
         // Initial set up
         document.getElementById('win-box').style.maxHeight = '50px'; // make box big enough
         document.getElementById('win-box-moves-stats').style.maxHeight = '50px'; // make box big enough
         document.getElementById('win-box-answer-stats').style.maxHeight = '50px'; // make box big enough
-        document.getElementById('moves').innerText = (this.num_guesses > 1) ? `Correct in ${this.num_guesses} guesses!` : "Correct in 1 guess!";
         document.getElementById('moves-stats').innerText = document.getElementById('moves').innerText;
         document.getElementById('answer').innerText = `The answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
         document.getElementById('answer-stats').innerText = document.getElementById('answer').innerText;
@@ -340,9 +339,50 @@ class Game {
         document.getElementById('stats-ui').dataset.reveal = '1';
     }
 
+    win() {
+        this.won = true;
+        this.lost = false;
+        document.getElementById('moves').innerText = (this.num_guesses > 1) ? `Correct in ${this.num_guesses} guesses!` : "Correct in 1 guess!";
+        this.gameEnd();
+    }
+
+    lose() {
+        this.lost = true;
+        this.won = false;
+        document.getElementById('moves').innerText = "You lose :(";
+        this.gameEnd();
+    }
+
+    newBestScore() {
+        this.best_guess = this.current_guess; 
+        this.best_score = this.current_score;
+        document.getElementById("best-guess").innerText = this.current_guess.hex;
+        document.getElementById("best-guess-stats").innerText = document.getElementById("best-guess").innerText;
+        document.getElementById("best-guess-score").innerText = Math.round(this.current_score * 100) / 100; // 2 decimal places
+        document.getElementById("best-guess-score-stats").innerText = document.getElementById("best-guess-score").innerText;
+        document.querySelector(':root').style.setProperty('--best-guess', this.current_guess.hex);
+
+        // Flash results section text
+        this.flash('#44ff44');
+    }
+
+    flash(colour) {
+        /* Flashes the text when a new best guess is made */
+        document.getElementById('results').style.transition = 'background-color 2s, color 0s'; // set colour change to instant
+        document.getElementById('results').style.color = colour; // set background to colour instantly
+        document.getElementById('colour-text').style.transition = 'color 0s'; // set colour change to instant
+        document.getElementById('colour-text').style.color = colour; // set background to colour instantly
+        setTimeout(() => {
+            document.getElementById('results').style.transition = 'background-color 2s, color 1.5s'; // set colour change to 2s
+            document.getElementById('results').style.color = 'var(--colour)';
+            document.getElementById('colour-text').style.transition = 'background-color 2s, color 1.5s'; // set colour change to 2s
+            document.getElementById('colour-text').style.color = 'var(--colour)';
+            }, 10);
+    }
+
     makeGuess(guess) {
         // Do nothing if the game is won
-        if (this.won) {
+        if (this.won || this.lost) {
             return;
         }
 
@@ -358,13 +398,7 @@ class Game {
         document.getElementById("score").innerText = Math.round(this.current_score * 100) / 100; // rounded to 2dp
 
         if (this.current_score > this.best_score) {
-            this.best_guess = this.current_guess; 
-            this.best_score = this.current_score;
-            document.getElementById("best-guess").innerText = this.current_guess.hex;
-            document.getElementById("best-guess-stats").innerText = document.getElementById("best-guess").innerText;
-            document.getElementById("best-guess-score").innerText = Math.round(this.current_score * 100) / 100;
-            document.getElementById("best-guess-score-stats").innerText = document.getElementById("best-guess-score").innerText;
-            document.querySelector(':root').style.setProperty('--best-guess', this.current_guess.hex);
+            this.newBestScore();
         }
 
         // Check if it's correct
@@ -380,6 +414,12 @@ class Game {
         // If the guess is within the boundary you still win.
         if (this.current_score > 100 - this.jnd) {
             this.win();
+            return;
+        }
+
+        // If lose
+        if (this.num_guesses >= this.max_guesses) {
+            this.lose();
         }
         
     }
@@ -516,19 +556,27 @@ class App {
     }
 
     toggleMode() {
-        if (this.game.mode === 'easy') {
-            this.game.mode = 'hard';
-            this.game.jnd = 0;
-            document.getElementById('mode-button').innerText = 'Mode: Hard';
-        } else {
-            this.game.mode = 'easy';
-            this.game.jnd = 2;
-            document.getElementById('mode-button').innerText = 'Mode: Easy';
+        switch (this.game.mode) {
+            case 'hard':
+                this.game.mode = 'easy';
+                this.game.jnd = 2;
+                document.getElementById('mode-button').innerText = 'Mode: Easy';
 
-            if (this.game.best_score > 100 - this.game.jnd) {
-                this.game.win();
-                document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
-            }
+                if (this.game.best_score > 100 - this.game.jnd) {
+                    this.game.win();
+                    document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
+                }
+                break;
+            case 'normal':
+                this.game.mode = 'easy';
+                this.game.jnd = 0;
+                document.getElementById('mode-button').innerText = 'Mode: Hard';
+                break;
+            case 'easy':
+                this.game.mode = 'normal';
+                this.game.jnd = 0;
+                document.getElementById('mode-button').innerText = 'Mode: Normal';
+                break;
         }
     }
 
