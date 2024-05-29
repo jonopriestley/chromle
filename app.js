@@ -9,7 +9,7 @@ class Colour {
 
         this.rgb = [r, g, b];
 
-        this.hsl = this.hsl();
+        this.hsl = this.hsl(r, g, b);
 
         this.max_dist = this.maxEuclidDistance();
 
@@ -254,10 +254,10 @@ class Colour {
         return dE00;
     }
 
-    hsl() {
-        let r = this.r / 255;
-        let g = this.g / 255;
-        let b = this.b / 255;
+    hsl(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
 
         let Cmax = Math.max(r, g, b);
         let Cmin = Math.min(r, g, b);
@@ -407,6 +407,32 @@ class Game {
 
     mod(n, m) {
         return ((n % m) + m) % m;
+    }
+
+    hsl(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+
+        let Cmax = Math.max(r, g, b);
+        let Cmin = Math.min(r, g, b);
+        let d = Cmax - Cmin;
+
+        let l = (Cmax + Cmin) / 2;
+        let s = (d === 0) ? 0 : d / (1 - Math.abs(2 * l - 1));
+        
+        let h;
+        if (d === 0) {
+            h = 0;
+        } else if (Cmax == r) {
+            h = 60 * this.mod(( (g - b) / d), 6);
+        } else if (Cmax == g) {
+            h = 60 * (( (b - r) / d) + 2);
+        } else if (Cmax == b) {
+            h = 60 * (( (r - g) / d) + 4);
+        }
+
+        return [h, s, l];
     }
 
     convertHSLtoRGB(h, s, l) {
