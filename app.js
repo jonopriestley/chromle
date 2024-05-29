@@ -329,8 +329,8 @@ class Game {
         const [r, g, b] = this.convertHSLtoRGB(hsl[0], hsl[1], l);
         document.querySelector(':root').style.setProperty('--bg-secondary', new Colour(r, g, b).hex);
 
-        // Make slider 160 degrees offset from the answer
-        const new_hue = (hsl[0] + 90) % 360;
+        // Make slider 60 degrees offset from the answer
+        const new_hue = (hsl[0] + 60) % 360;
         const [r2, g2, b2] = this.convertHSLtoRGB(new_hue, 0.952, 1 - l);
         document.querySelector(':root').style.setProperty('--colour-slider', `rgba(${r2}, ${g2}, ${b2}, 0.75)`);
 
@@ -532,7 +532,7 @@ class App {
         document.getElementById("colour").innerText = this.game.best_guess.hex;
         // Set slider and colour wheel lightness to best guess lightness
         let [r, g, b] = this.game.best_guess.rgb;
-        let l = Math.round((Math.max(r, g, b) + Math.min(r, g, b)) / (2 * 255));
+        let l = (Math.max(r, g, b) + Math.min(r, g, b)) / (2 * 255);
         document.getElementById("lightness").value = 100 * l;
         document.querySelector(':root').style.setProperty('--lightness', 100 * l);
     }

@@ -19,16 +19,11 @@ document.addEventListener('resize', function() {
 let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
 document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
 
-/*
-document.getElementById('colour-wheel').addEventListener('mouseenter', function() {
-  document.getElementById('colour-wheel').dispatchEvent(new Event('mousedown'));
-});
-*/
-
 document.addEventListener('input', function() {
   document.getElementById('colour').innerText = document.getElementById('colour-picker-input').value;
 });
 
+/* Buttons  */
 
 const buttons = document.getElementsByClassName('button');
 
@@ -36,17 +31,22 @@ const buttons = document.getElementsByClassName('button');
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener('mousedown', event => {
     buttons[i].style.backgroundColor = '#bbb';
-  }
-  );
+  });
 }
 
 // Button mouse leave
 for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('mouseenter', event => {
-      buttons[i].style.backgroundColor = '#ddd';
-    }
-    );
-  }
+  buttons[i].addEventListener('mouseup', event => {
+    buttons[i].style.backgroundColor = '#ddd';
+  });
+}
+
+// Button mouse enter
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener('mouseenter', event => {
+    buttons[i].style.backgroundColor = '#ddd';
+  });
+}
 
 // Button mouse leave
 for (let i = 0; i < buttons.length; i++) {
@@ -55,6 +55,8 @@ for (let i = 0; i < buttons.length; i++) {
     }
     );
   }
+
+/* ----------------------------------------------------------- */
 
 // Initialise the day
 const now = new Date();
@@ -72,7 +74,7 @@ function setLightness() {
 }
 
 function setPickerLightness() {
-  let hex = document.getElementById('colour-picker-input').value;
+  const hex = document.getElementById('colour-picker-input').value;
   let [h, s, l] = hexToHSL(hex);
   l = rangeInput.value / 100;
   document.getElementById('colour-picker-input').value = hslToHex(h, s, l);
@@ -98,8 +100,8 @@ document.addEventListener('click', function() {
 });
 
 const picker = document.getElementById('colour-picker-input').addEventListener('input', function() {
-  let hex = document.getElementById('colour-picker-input').value;
-  let [h, s, l] = hexToHSL(hex);
+  const hex = document.getElementById('colour-picker-input').value;
+  const [h, s, l] = hexToHSL(hex);
   document.getElementById("lightness").value = Math.round(100 * l);
 });
 
@@ -109,16 +111,17 @@ function mod(n, m) {
 
 function hexToHSL(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  let r = parseInt(result[1], 16) / 255;
-  let g = parseInt(result[2], 16) / 255;
-  let b = parseInt(result[3], 16) / 255;
+  let r, g, b;
+  r = parseInt(result[1], 16) / 255;
+  g = parseInt(result[2], 16) / 255;
+  b = parseInt(result[3], 16) / 255;
 
-  let Cmax = Math.max(r, g, b);
-  let Cmin = Math.min(r, g, b);
-  let d = Cmax - Cmin;
+  const Cmax = Math.max(r, g, b);
+  const Cmin = Math.min(r, g, b);
+  const d = Cmax - Cmin;
 
-  let l = (Cmax + Cmin) / 2;
-  let s = (d === 0) ? 0 : d / (1 - Math.abs(2 * l - 1));
+  const l = (Cmax + Cmin) / 2;
+  const s = (d === 0) ? 0 : d / (1 - Math.abs(2 * l - 1));
   
   let h;
   if (d === 0) {
@@ -135,14 +138,12 @@ function hexToHSL(hex) {
 }
 
 function hslToHex(h, s, l) {
-  let c = s * ( 1 - Math.abs(2*l - 1) );
-  let x = c * (1 - Math.abs(mod(h / 60, 2) - 1) );
-  let m = l - c/2;
+  const c = s * ( 1 - Math.abs(2*l - 1) );
+  const x = c * (1 - Math.abs(mod(h / 60, 2) - 1) );
+  const m = l - c/2;
 
-  let sector = Math.floor( mod(h, 360) / 60 );
-
-  let options = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
-
+  const sector = Math.floor( mod(h, 360) / 60 );
+  const options = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
   let [r, g, b] = options[sector];
   [r, g, b] = [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 
