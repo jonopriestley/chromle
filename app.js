@@ -312,7 +312,7 @@ class Game {
         document.getElementById('win-box-moves-stats').style.maxHeight = '50px'; // make box big enough
         document.getElementById('win-box-answer-stats').style.maxHeight = '50px'; // make box big enough
         document.getElementById('moves-stats').innerText = document.getElementById('moves').innerText;
-        document.getElementById('answer').innerText = `The answer was ${this.answer.r}, ${this.answer.g}, ${this.answer.b}.`;
+        document.getElementById('answer').innerText = `The answer was ${this.answer.hex}.`;
         document.getElementById('answer-stats').innerText = document.getElementById('answer').innerText;
         document.querySelector(':root').style.setProperty('--bg-primary', this.answer.hex);
 
