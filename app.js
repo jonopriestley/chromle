@@ -507,8 +507,7 @@ class App {
     newGame() {
         if (!this.initialised) this.initialised = true;
         else if (!this.game.won) return;
-        else this.emptySettings();
-
+        else this.emptySettings();  
         /* 
         this.answer = new Colour(Math.floor(256 * Math.random()), Math.floor(256 * Math.random()), Math.floor(256 * Math.random()));
         this.answer = new Colour(0xfb, 0xdd, 0x7e); // for testing how colordle finds colour difference from "wheat"
@@ -568,7 +567,7 @@ class App {
                 }
                 break;
             case 'normal':
-                this.game.mode = 'easy';
+                this.game.mode = 'hard';
                 this.game.jnd = 0;
                 document.getElementById('mode-button').innerText = 'Mode: Hard';
                 break;

@@ -515,6 +515,7 @@ path {
   transform: scale(0);
   transition: opacity 0.25s, transform 0.25s;
   color: var(--colour);
+  min-width: 160px;
 }
 
 .stats-window[data-reveal="1"] {
@@ -599,6 +600,7 @@ path {
   transform: scale(0);
   transition: opacity 0.25s, transform 0.25s;
   color: var(--colour);
+  min-width: 160px;
 }
 
 .settings-window[data-reveal="1"] {
