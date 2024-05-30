@@ -386,6 +386,12 @@ class Game {
             return;
         }
 
+        // If lost (after switching to hard mode dont automatically make them lose unless they guess another time)
+        if (this.mode === 'hard' && this.num_guesses >= this.max_guesses) {
+            this.lose();
+            return;
+        }
+
         // Get guess
         this.current_guess = guess;
         console.log(this.current_guess.rgb);
@@ -418,8 +424,9 @@ class Game {
         }
 
         // If lose
-        if (this.num_guesses >= this.max_guesses) {
+        if (this.mode === 'hard' && this.num_guesses >= this.max_guesses) {
             this.lose();
+            return;
         }
         
     }

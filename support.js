@@ -127,10 +127,10 @@ function setPickerLightness() {
 const picker = document.getElementById('colour-picker-input').addEventListener('input', function() {
   const hex = document.getElementById('colour-picker-input').value; // get picker value
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); // split into rgb hex strings
-  let [r, g, b] = [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[2], 16)]; // convert to integers
-  let l = ( Math.max(r, g, b) + Math.min(r, g, b) ) / (2 * 255); // get lightness
-  document.getElementById("lightness").value = Math.round(100 * l); // set slider value to match picker
-  root.style.setProperty('--lightness', Math.round(100 * l));
+  let [r, g, b] = [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]; // convert to integers
+  let l = Math.round ( 100 * ( Math.max(r, g, b) + Math.min(r, g, b) ) / (2 * 255) ); // get lightness
+  document.getElementById("lightness").value = l; // set slider value to match picker
+  root.style.setProperty('--lightness', l);
 });
 
 /* ----------------------------------------------------------- */
