@@ -71,15 +71,6 @@ p {
   justify-content: center;
 }
 
-#mode-button {
-  color: #000;
-  background-color: #fff;
-  border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
-  margin-left: 5px;
-}
-
 path {
   fill: var(--colour);
 }
@@ -116,7 +107,6 @@ path {
   font-size: 12pt;
   margin-top: 4px;
 }
-
 
 .page-head {
   background-color: var(--bg-secondary);
@@ -211,7 +201,6 @@ path {
   transition: fill 2s;
 }
 
-
 .colour-text {
   padding: 15px;
   display: flex;
@@ -247,6 +236,11 @@ path {
   transition: background-color 2s, color 2s;
 }
 
+#moves-box {
+  max-height: 50px;
+  padding-top: 5px;
+}
+
 #win-box {
   max-height: 0px;
   padding-top: 5px;
@@ -270,18 +264,6 @@ path {
   align-items: center;
   position: relative;
 }
-
-/*
-<label class="c-range__label" for="lightness">Wheel Lightness</label>
-.c-range__label {
-  position: absolute;
-  font-size: 10pt;
-  bottom: -60%;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-*/
 
 .c-range__slider {
   -webkit-appearance: none;
@@ -313,7 +295,6 @@ path {
   background: var(--colour-slider);
   cursor: pointer;
 }
-
 
 .c-range__output {
   opacity: 0%;
@@ -631,3 +612,11 @@ path {
   padding: 8px 15px;
 }
 
+#mode-button {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #434343;
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-left: 5px;
+}

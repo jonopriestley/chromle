@@ -303,11 +303,13 @@ class Game {
 
         this.mode = 'easy';
         this.jnd = 2;
-        this.max_guesses = 30; // maximum number of guesses on hard mode
+        this.max_guesses = 50; // maximum number of guesses on hard mode
     }
 
     gameEnd() {
         // Initial set up
+        document.getElementById('moves-box').style.maxHeight = '0px'; // make box invisible again
+        document.getElementById('total-moves').innerText = '';
         document.getElementById('win-box').style.maxHeight = '50px'; // make box big enough
         document.getElementById('win-box-moves-stats').style.maxHeight = '50px'; // make box big enough
         document.getElementById('win-box-answer-stats').style.maxHeight = '50px'; // make box big enough
@@ -396,6 +398,8 @@ class Game {
         this.current_guess = guess;
         console.log(this.current_guess.rgb);
         this.num_guesses += 1;
+
+        document.getElementById('total-moves').innerText = (this.mode === 'hard') ? `${this.num_guesses}/${this.max_guesses} Guesses` : `${this.num_guesses} Guesses`;
 
         // Get guess score
         this.current_score = this.getScore();
@@ -531,6 +535,8 @@ class App {
         document.getElementById('colour-picker-input').value = '#808080';
         document.getElementById('colour').innerText = '#808080';
         document.getElementById('lightness').value = '50';
+        document.getElementById('moves-box').style.maxHeight = '50px'; // make box visible again
+        document.getElementById('total-moves').style.maxHeight = '';
         document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
         document.getElementById('moves').innerText = '';
         document.getElementById('answer').innerText = '';
@@ -563,36 +569,38 @@ class App {
 
     toggleMode() {
         switch (this.game.mode) {
+            case 'easy':
+                this.game.mode = 'normal';
+                this.game.jnd = 0;
+                break;
+            case 'normal':
+                this.game.mode = 'hard';
+                this.game.jnd = 0;
+                break;
             case 'hard':
                 this.game.mode = 'easy';
                 this.game.jnd = 2;
-                document.getElementById('mode-button').innerText = 'Mode: Easy';
-
                 if (this.game.best_score > 100 - this.game.jnd) {
                     this.game.win();
                     document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
                 }
                 break;
-            case 'normal':
-                this.game.mode = 'hard';
-                this.game.jnd = 0;
-                document.getElementById('mode-button').innerText = 'Mode: Hard';
-                break;
-            case 'easy':
-                this.game.mode = 'normal';
-                this.game.jnd = 0;
-                document.getElementById('mode-button').innerText = 'Mode: Normal';
-                break;
         }
+        // Update game mode button
+        const mode = this.game.mode.slice(0, 1).toUpperCase().concat(this.game.mode.slice(1));
+        document.getElementById('mode-button').innerText = `Mode: ${mode}`;
+        // Update guesses section
+        document.getElementById('total-moves').innerText = (this.game.mode === 'hard') ? `${this.game.num_guesses}/${this.game.max_guesses} Guesses` : `${this.game.num_guesses} Guesses`;
+
     }
 
     pseudoRNGSeeded(a) {
         return function() {
             a |= 0;                           // convert to 32 bit signed int
             a = a + 0x9e3779b9 | 0;           // a = (a + (2**32 / phi)) | 0 --> 0x9e3779b9 is coprime to 2^32
-            let t = a ^ a >>> 16;             // t(0:15) = a(0:15), t(16:31) = a(16:31) ^ a(16:31)
+            let t = a ^ a >>> 16;             // t(0:15) = a(0:15), t(16:31) = a(16:31) ^ a(0:15)
             t = Math.imul(t, 0x21f0aaad);     // multiply by a big prime number to mess it around
-            t = t ^ t >>> 15;                 // t(15:31) = t(15:31) ^ a(15:31)
+            t = t ^ t >>> 15;                 // t(15:31) = t(15:31) ^ t(0:16)
             t = Math.imul(t, 0x735a2d97);     // multiply by a big prime number to mess it around
             return ((t = t ^ t >>> 15) >>> 0) / 4294967296; // 
         }
