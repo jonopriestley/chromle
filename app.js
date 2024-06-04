@@ -536,7 +536,7 @@ class App {
         document.getElementById('colour').innerText = '#808080';
         document.getElementById('lightness').value = '50';
         document.getElementById('moves-box').style.maxHeight = '50px'; // make box visible again
-        document.getElementById('total-moves').style.maxHeight = '';
+        document.getElementById('total-moves').value = '';
         document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
         document.getElementById('moves').innerText = '';
         document.getElementById('answer').innerText = '';
@@ -580,7 +580,7 @@ class App {
             case 'hard':
                 this.game.mode = 'easy';
                 this.game.jnd = 2;
-                if (this.game.best_score > 100 - this.game.jnd) {
+                if ((this.game.best_score > 100 - this.game.jnd) && !this.game.won) {
                     this.game.win();
                     document.getElementById('win').innerText += ` You guessed within the noticable boundary of the answer. The answer was ${this.answer.rgb}.`;
                 }
@@ -590,7 +590,7 @@ class App {
         const mode = this.game.mode.slice(0, 1).toUpperCase().concat(this.game.mode.slice(1));
         document.getElementById('mode-button').innerText = `Mode: ${mode}`;
         // Update guesses section
-        document.getElementById('total-moves').innerText = (this.game.mode === 'hard') ? `${this.game.num_guesses}/${this.game.max_guesses} Guesses` : `${this.game.num_guesses} Guesses`;
+        if (!this.game.won) document.getElementById('total-moves').innerText = (this.game.mode === 'hard') ? `${this.game.num_guesses}/${this.game.max_guesses} Guesses` : `${this.game.num_guesses} Guesses`;
 
     }
 
