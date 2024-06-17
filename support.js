@@ -20,6 +20,8 @@ document.addEventListener('resize', function() {
 
 let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
 document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
+document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
+document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
 /* ----------------------------------------------------------- */
 
 /* Colour picker = Colour wheel */

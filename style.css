@@ -17,6 +17,7 @@
   --color-alpha: hsl(var(--hue), 100%, calc((var(--lightness) / 100 * 100%)));
   --color-dark: hsla(var(--hue), 3%, 25%, 0.75);
   --colour-slider: hsla(160, 95.2%, 32.4%, 0.75);
+  --button-font-size: 10pt;
 
   /* fonts */
   --alpha-font-family: "IBM Plex Mono", monospace;
@@ -55,13 +56,15 @@ p {
 	vertical-align: baseline;
 }
 
+.button {
+  font-size: var(--button-font-size);
+}
 
 #guess-button {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
   border-radius: 20px;
-  font-size: 10pt;
   padding: 8px 15px;
   justify-self: center;
 }
@@ -104,7 +107,7 @@ path {
   margin-right: 5px;
   position: relative;
   width: fit-content;
-  font-size: 12pt;
+  font-size: var(--button-font-size);
   margin-top: 4px;
 }
 
