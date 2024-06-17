@@ -80,7 +80,7 @@ window.onload = function() {
 
 /* Initialise the day */
 const now = new Date();
-const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19870; // number of days of this website
+const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
 document.getElementById('day-number').innerText = `Day ${day}`;
 /* ----------------------------------------------------------- */
 
