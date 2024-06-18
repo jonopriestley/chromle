@@ -3,7 +3,7 @@
 const eye = new EyeDropper();
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('colour-wheel').addEventListener('mousedown', function() {
-    eye.open().then(function(result) {
+    eye.open({signal: aborter.signal}).then(function(result) {
       document.getElementById('colour').innerText = result.sRGBHex;
       document.getElementById('colour-picker-input').value = result.sRGBHex;
       document.querySelector(':root').style.setProperty('--wheel-colour', result.sRGBHex);
