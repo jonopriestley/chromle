@@ -18,6 +18,8 @@
   --color-dark: hsla(var(--hue), 3%, 25%, 0.75);
   --colour-slider: hsla(160, 95.2%, 32.4%, 0.75);
   --button-font-size: 10pt;
+  --wheel-opacity: 1;
+  --wheel-size: 100%;
 
   /* fonts */
   --alpha-font-family: "IBM Plex Mono", monospace;
@@ -214,11 +216,17 @@ path {
 .wheel {
   display: flex;
   justify-content: center;
+  opacity: var(--wheel-opacity);
+  max-width: var(--wheel-size);
+  max-height: var(--wheel-size);
 }
 
 .wheel-slider {
   display: flex;
   justify-content: center;
+  opacity: var(--wheel-opacity);
+  max-width: var(--wheel-size);
+  max-height: var(--wheel-size);
 }
 
 .circle-guess {
