@@ -672,14 +672,14 @@ class App {
         document.body.style.setProperty('font-size', `${(screen.width < screen.height) ? 200 : 100}%`);
 
         // Remove wheel for phones
-        if (screen.width < screen.height) {
+        if (window.innerWidth < window.innerHeight) {
             document.getElementById('colour-picker').style.marginTop = '50px';
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
-            document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+            //document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
         } else {
             document.getElementById('colour-picker').style.marginTop = '10px';
-            document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+            //document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
         }
     }
 }
