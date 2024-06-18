@@ -242,7 +242,7 @@ class Colour {
             H_dash_bar -= 180;
         }
 
-        let t = 1 - 0.17 * cosDeg(H_dash_bar - 30) + 0.24 * cosDeg(2 * H_dash_bar) + 0.32 * cosDeg(3 * H_dash_bar + 6) - 0.20 * cosDeg(4 * H_dash_bar - 63);
+        let t = 1 - 0.17 * this.cosDeg(H_dash_bar - 30) + 0.24 * this.cosDeg(2 * H_dash_bar) + 0.32 * this.cosDeg(3 * H_dash_bar + 6) - 0.20 * this.cosDeg(4 * H_dash_bar - 63);
 
         let sC = 1 + 0.045 * C_dash_bar;
         let sH = 1 + 0.015 * C_dash_bar * t;
