@@ -3,7 +3,7 @@
 const eye = new EyeDropper();
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('colour-wheel').addEventListener('mousedown', function() {
-    eye.open({signal: aborter.signal}).then(function(result) {
+    eye.open().then(function(result) {
       document.getElementById('colour').innerText = result.sRGBHex;
       document.getElementById('colour-picker-input').value = result.sRGBHex;
       document.querySelector(':root').style.setProperty('--wheel-colour', result.sRGBHex);
@@ -29,7 +29,7 @@ document.querySelector(':root').style.setProperty('--button-font-size', `${(wind
 document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
 
 // Remove wheel for phones
-if (window.innerWidth < window.innerHeight) {
+if (screen.width < screen.height) {
   document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
   document.querySelector(':root').style.setProperty('--wheel-size', '0');
 }

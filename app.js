@@ -668,10 +668,12 @@ class App {
         document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
 
         // Remove wheel for phones
-        if (window.innerWidth < window.innerHeight) {
+        if (screen.width < screen.height) {
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
         }
+        
+        //document.getElementById('colour').innerHTML += `${window.innerWidth}:${window.innerHeight}`;
     }
 }
 
