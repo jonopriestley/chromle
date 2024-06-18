@@ -20,14 +20,14 @@ document.addEventListener('resize', function() {
   document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
   document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
 });
-*/
+
 
 // Set wheel and picker sizes to bigger for phones
 let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
 document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
-document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
+document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 26 : 10}pt`);
 document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
-
+*/
 /*
 // Remove wheel for phones
 if (screen.width < screen.height) {
@@ -87,12 +87,16 @@ for (let i = 0; i < buttons.length; i++) {
 
 /* ----------------------------------------------------------- */
 
-
 /* Open tutorial when the window is loaded */
 window.onload = function() {
   app.openTutorial();
   app.resize();
 }
+
+window.onresize = function() {
+  app.resize();
+}
+
 /* ----------------------------------------------------------- */
 
 /* Initialise the day */

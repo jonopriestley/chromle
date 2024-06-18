@@ -9,7 +9,7 @@
         <link rel="icon" href="images/favicon.ico">
     </head>
     
-    <body onresize="app.resize()">
+    <body>
         <div class="page-head">
             <div class="day-number" id="day-number"></div>
             <button class="path-button settings-button" id="settings-open-button" onclick="app.openSettings()">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="colour-picker">
+                <div class="colour-picker" id="colour-picker">
                     <input id="colour-picker-input" type="color">
                 </div>
                 

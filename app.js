@@ -255,12 +255,8 @@ class Colour {
         
         dE00 = Math.sqrt(dE00);
 
-        console.log(dE00);
-
         return dE00;
     }
-
-    
 
     hsl(r, g, b) {
         r /= 255;
@@ -670,17 +666,21 @@ class App {
     }
 
     resize() {
-        let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
+        let min_dimension = (screen.width < screen.height) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
         document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
-        document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
-        document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
+        document.querySelector(':root').style.setProperty('--button-font-size', `${(screen.width < screen.height) ? 26 : 10}pt`);
+        document.body.style.setProperty('font-size', `${(screen.width < screen.height) ? 200 : 100}%`);
 
         // Remove wheel for phones
         if (screen.width < screen.height) {
+            document.getElementById('colour-picker').style.marginTop = '50px';
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
+            document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+        } else {
+            document.getElementById('colour-picker').style.marginTop = '10px';
+            document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
         }
-        
     }
 }
 
