@@ -216,9 +216,10 @@ class Colour {
 
         let h_dash1 = this.mod(Math.atan2(b1, a_dash1), toRad(360));
         let h_dash2 = this.mod(Math.atan2(b2, a_dash2), toRad(360));
-        let dh_dash = h_dash2 - h_dash1;
-        if (Math.abs(h_dash1 - h_dash2) > toRad(180) && h_dash2 <= h_dash1) dh_dash += toRad(360);
-        else if (Math.abs(h_dash1 - h_dash2) > toRad(180) && h_dash2 > h_dash1) dh_dash -= toRad(360);
+        let dh_dash = this.mod(h_dash2 - h_dash1 + toRad(180), toRad(360)) - toRad(180); // keep in -180 to 180 degree range
+        //let dh_dash = h_dash2 - h_dash1;
+        //if (Math.abs(dh_dash) > toRad(180) && h_dash2 <= h_dash1) dh_dash += toRad(360);
+        //else if (Math.abs(dh_dash) > toRad(180) && h_dash2 > h_dash1) dh_dash -= toRad(360);
 
         // If either are 0 then set all to 0
         if (C_dash1 * C_dash2 === 0) {
@@ -235,7 +236,6 @@ class Colour {
         if (abs_diff > toRad(180) && h_sum < toRad(360)) H_dash_bar += toRad(180);
         else if (abs_diff > toRad(180) && (h_sum >= toRad(360))) H_dash_bar -= toRad(180);
         
-
         let t = 1 - 0.17 * Math.cos(H_dash_bar - toRad(30)) + 0.24 * Math.cos(2 * H_dash_bar) + 0.32 * Math.cos(3 * H_dash_bar + toRad(6)) - 0.20 * Math.cos(4 * H_dash_bar - toRad(63));
 
         let l50_2 = (L_bar - 50) * (L_bar - 50);
@@ -249,6 +249,15 @@ class Colour {
         let rT = -1 * r_C * Math.sin(2 * d_theta);
         let dE00 = Math.pow(dL_dash / (kL * sL), 2) + Math.pow(dC_dash / (kC * sC), 2) + Math.pow(dH_dash / (kH * sH), 2) + (rT * dC_dash * dH_dash / (kC * sC * kH * sH));
         
+        /*
+        console.log([dL_dash / (kL * sL), dC_dash / (kC * sC), dH_dash / (kH * sH)]);
+        console.log([sL, sC, sH]);
+        console.log([dL_dash, dC_dash, dH_dash]);
+        console.log([dh_dash * 180 / Math.PI, t, H_dash_bar]);
+        //console.log([h_dash1 * 180 / Math.PI, h_dash2 * 180 / Math.PI]);
+        console.log('');
+        */
+
         dE00 = Math.sqrt(dE00);
 
         return dE00;
