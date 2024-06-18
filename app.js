@@ -107,6 +107,10 @@ class Colour {
         return 1/3 * t * Math.pow(d, -2) + 4 / 29;
     }
 
+    cosDeg(n) {
+        return Math.cos(n * Math.PI / 180);
+    }
+
     LabD65() {
         let r = this.r / 255;
         let g = this.g / 255;
@@ -256,9 +260,7 @@ class Colour {
         return dE00;
     }
 
-    cosDeg(n) {
-        return Math.cos(n * Math.PI / 180);
-    }
+    
 
     hsl(r, g, b) {
         r /= 255;
@@ -679,7 +681,6 @@ class App {
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
         }
         
-        //document.getElementById('colour').innerHTML += `${window.innerWidth}:${window.innerHeight}`;
     }
 }
 

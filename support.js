@@ -28,13 +28,13 @@ document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dim
 document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
 document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
 
+/*
 // Remove wheel for phones
 if (screen.width < screen.height) {
   document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
   document.querySelector(':root').style.setProperty('--wheel-size', '0');
 }
-
-document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+*/
 
 /* ----------------------------------------------------------- */
 
@@ -91,6 +91,7 @@ for (let i = 0; i < buttons.length; i++) {
 /* Open tutorial when the window is loaded */
 window.onload = function() {
   app.openTutorial();
+  app.resize();
 }
 /* ----------------------------------------------------------- */
 
