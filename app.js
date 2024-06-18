@@ -107,10 +107,6 @@ class Colour {
         return 1/3 * t * Math.pow(d, -2) + 4 / 29;
     }
 
-    cosDeg(n) {
-        return Math.cos(n * Math.PI / 180);
-    }
-
     LabD65() {
         let r = this.r / 255;
         let g = this.g / 255;
@@ -187,8 +183,8 @@ class Colour {
     }
 
     Lab00Distance(other_colour) {
-        const d2r = Math.PI / 180; // degrees to radians (for trig functions)
-        const r2d = 180 / Math.PI; // radians to degrees (for inverse trig functions)
+        // Utility function
+        const toRad = (val) => (val * Math.PI) / 180.0;
 
         const kL = 1;
         const kC = 1;
@@ -209,49 +205,49 @@ class Colour {
         let C2 = Math.sqrt(a2 * a2 + b2 * b2);
         let C_bar = ( C1 + C2 ) / 2;
 
-        let a_dash1 = a1 + 0.5 * a1 * ( 1 - Math.sqrt( C_bar**7 / (C_bar**7 + 25**7) ) );
-        let a_dash2 = a2 + 0.5 * a2 * ( 1 - Math.sqrt( C_bar**7 / (C_bar**7 + 25**7) ) );
+        let G = 0.5 * ( 1 - Math.sqrt( C_bar**7 / (C_bar**7 + 25**7) ) );
+        let a_dash1 = a1 * ( 1 + G );
+        let a_dash2 = a2 * ( 1 + G );
 
         let C_dash1 = Math.sqrt( a_dash1 * a_dash1 + b1 * b1 );
         let C_dash2 = Math.sqrt( a_dash2 * a_dash2 + b2 * b2 );
         let dC_dash = C_dash2 - C_dash1;
         let C_dash_bar = ( C_dash1 + C_dash2 ) / 2;
 
-        let h_dash1 = (((Math.atan2(b1, a_dash1) * r2d) % 360) + 360) % 360;
-        let h_dash2 = (((Math.atan2(b2, a_dash2) * r2d) % 360) + 360) % 360;
+        let h_dash1 = this.mod(Math.atan2(b1, a_dash1), toRad(360));
+        let h_dash2 = this.mod(Math.atan2(b2, a_dash2), toRad(360));
         let dh_dash = h_dash2 - h_dash1;
+        if (Math.abs(h_dash1 - h_dash2) > toRad(180) && h_dash2 <= h_dash1) dh_dash += toRad(360);
+        else if (Math.abs(h_dash1 - h_dash2) > toRad(180) && h_dash2 > h_dash1) dh_dash -= toRad(360);
 
-        if (Math.abs(h_dash1 - h_dash2) > 180 && h_dash2 <= h_dash1) {
-            dh_dash += 360;
-        } else if (Math.abs(h_dash1 - h_dash2) > 180 && h_dash2 > h_dash1) {
-            dh_dash -= 360;
-        }
-
-        if (C_dash1 === 0 || C_dash2 === 0) {
+        // If either are 0 then set all to 0
+        if (C_dash1 * C_dash2 === 0) {
             dh_dash = 0;
             h_dash1 = 0;
             h_dash2 = 0;
         }
         
-        let dH_Dash = 2 * Math.sqrt(C_dash1 * C_dash2) * Math.sin(d2r * dh_dash / 2);
+        let dH_dash = 2 * Math.sqrt(C_dash1 * C_dash2) * Math.sin(dh_dash / 2);
 
-        let H_dash_bar = (h_dash1 + h_dash2) / 2;
-        if (Math.abs(h_dash1 - h_dash2) > 180 && (h_dash1 + h_dash2 < 360)) {
-            H_dash_bar += 180;
-        } else if (Math.abs(h_dash1 - h_dash2) > 180 && (h_dash1 + h_dash2 >= 360)) {
-            H_dash_bar -= 180;
-        }
+        let abs_diff = Math.abs(h_dash1 - h_dash2);
+        let h_sum = h_dash1 + h_dash2;
+        let H_dash_bar = h_sum / 2;
+        if (abs_diff > toRad(180) && h_sum < toRad(360)) H_dash_bar += toRad(180);
+        else if (abs_diff > toRad(180) && (h_sum >= toRad(360))) H_dash_bar -= toRad(180);
+        
 
-        let t = 1 - 0.17 * this.cosDeg(H_dash_bar - 30) + 0.24 * this.cosDeg(2 * H_dash_bar) + 0.32 * this.cosDeg(3 * H_dash_bar + 6) - 0.20 * this.cosDeg(4 * H_dash_bar - 63);
+        let t = 1 - 0.17 * Math.cos(H_dash_bar - toRad(30)) + 0.24 * Math.cos(2 * H_dash_bar) + 0.32 * Math.cos(3 * H_dash_bar + toRad(6)) - 0.20 * Math.cos(4 * H_dash_bar - toRad(63));
 
+        let l50_2 = (L_bar - 50) * (L_bar - 50);
         let sC = 1 + 0.045 * C_dash_bar;
         let sH = 1 + 0.015 * C_dash_bar * t;
-        let l50_2 = (L_bar - 50) * (L_bar - 50);
         let sL = 1 + 0.015 * l50_2 / Math.sqrt( 20 + l50_2 );
 
-        let rT = -2 * Math.sqrt( C_dash_bar**7 / (C_dash_bar**7 + 25**7) ) * Math.sin(d2r * 60 * Math.exp(-1 * Math.pow((H_dash_bar - 275) / 25, 2)) );
-
-        let dE00 = (dL_dash / (kL * sL)) ** 2 + (dC_dash / (kC * sC)) ** 2 + (dH_Dash / (kH * sH)) ** 2 + rT * dC_dash * dH_Dash / (kC * sC * kH * sH);
+        let C_dash_bar_7 = Math.pow(C_dash_bar, 7);
+        let r_C = 2 * Math.sqrt( C_dash_bar_7 / (C_dash_bar_7 + 6103515625) );
+        let d_theta = toRad(30) * Math.exp(-1 * Math.pow((H_dash_bar - toRad(275)) / toRad(25), 2)) ;
+        let rT = -1 * r_C * Math.sin(2 * d_theta);
+        let dE00 = Math.pow(dL_dash / (kL * sL), 2) + Math.pow(dC_dash / (kC * sC), 2) + Math.pow(dH_dash / (kH * sH), 2) + (rT * dC_dash * dH_dash / (kC * sC * kH * sH));
         
         dE00 = Math.sqrt(dE00);
 
@@ -400,13 +396,20 @@ class Game {
 
         // Get guess
         this.current_guess = guess;
+        this.current_score = this.getScore();
+        
+        // Check it's not a previous guess
+        if (this.isPreviousGuess(guess)) {
+            this.flash('#ff4444');
+            return;
+        }
+
         console.log(this.current_guess.rgb);
         this.num_guesses += 1;
 
         document.getElementById('total-moves').innerText = (this.mode === 'hard') ? `${this.num_guesses}/${this.max_guesses} Guesses` : `${this.num_guesses} Guesses`;
 
         // Get guess score
-        this.current_score = this.getScore();
 
         // Display current guess
         document.getElementById("score").innerText = Math.round(this.current_score * 100) / 100; // rounded to 2dp
@@ -437,6 +440,11 @@ class Game {
             return;
         }
         
+    }
+
+    isPreviousGuess(guess) {
+        if (this.previous_guesses[this.current_score] === undefined) return false;
+        return true;
     }
     
     getGuessDistance() {
