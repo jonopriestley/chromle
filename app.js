@@ -238,7 +238,7 @@ class Colour {
             H_dash_bar -= 180;
         }
 
-        let t = 1 - 0.17 * Math.cos((H_dash_bar - 30) * d2r) + 0.24 * Math.cos(2 * H_dash_bar * d2r) + 0.32 * Math.cos((3 * H_dash_bar + 6) * d2r) - 0.20 * Math.cos((4 * H_dash_bar - 63) * d2r);
+        let t = 1 - 0.17 * cosDeg(H_dash_bar - 30) + 0.24 * cosDeg(2 * H_dash_bar) + 0.32 * cosDeg(3 * H_dash_bar + 6) - 0.20 * cosDeg(4 * H_dash_bar - 63);
 
         let sC = 1 + 0.045 * C_dash_bar;
         let sH = 1 + 0.015 * C_dash_bar * t;
@@ -251,7 +251,13 @@ class Colour {
         
         dE00 = Math.sqrt(dE00);
 
+        console.log(dE00);
+
         return dE00;
+    }
+
+    cosDeg(n) {
+        return Math.cos(n * Math.PI / 180);
     }
 
     hsl(r, g, b) {
@@ -299,7 +305,7 @@ class Game {
         this.style = 'lab';
 
         this.best_guess = null;
-        this.best_score = 0;
+        this.best_score = -100;
 
         this.mode = 'easy';
         this.jnd = 2;

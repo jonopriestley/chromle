@@ -34,6 +34,8 @@ if (screen.width < screen.height) {
   document.querySelector(':root').style.setProperty('--wheel-size', '0');
 }
 
+document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+
 /* ----------------------------------------------------------- */
 
 /* Colour picker = Colour wheel */
