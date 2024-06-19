@@ -674,10 +674,21 @@ class App {
             document.getElementById('colour-picker').style.marginTop = '50px';
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
-            //document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+            document.getElementById('logo').style.height = '63px';
+            document.getElementById('day-number').style.fontSize = '28pt';
+            for (let i = 0; i < svgs.length; i++) {
+                svgs[i].style.height = '50px';
+                svgs[i].style.width = '50px';
+            }
         } else {
             document.getElementById('colour-picker').style.marginTop = '10px';
-            //document.getElementById('colour').innerHTML += `-${screen.width}:${screen.height}-`;
+            let svgs = document.getElementsByClassName('game-icon');
+            document.getElementById('logo').style.height = '40px';
+            document.getElementById('day-number').style.fontSize = '20pt';
+            for (let i = 0; i < svgs.length; i++) {
+                svgs[i].style.height = '32px';
+                svgs[i].style.width = '32px';
+            }
         }
     }
 }

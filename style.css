@@ -127,7 +127,6 @@ path {
   src: "Images/Chromle-light.png";
   margin: 0;
   height: 40px;
-  transition: all 2s;
 }
 
 .day-number {
