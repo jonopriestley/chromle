@@ -93,9 +93,6 @@ class Colour {
         const a = 500 * ( this.f(x/Xn) - fY );
         const b = 200 * ( fY - this.f(z/Zn) );
 
-        //const lab = [L, a, b];
-        //console.log([L, a, b]);
-
         return [L, a, b];
     }
 
@@ -235,6 +232,7 @@ class Colour {
         let H_dash_bar = h_sum / 2;
         if (abs_diff > toRad(180) && h_sum < toRad(360)) H_dash_bar += toRad(180);
         else if (abs_diff > toRad(180) && (h_sum >= toRad(360))) H_dash_bar -= toRad(180);
+        if (C_dash1 * C_dash2 === 0) H_dash_bar = h_sum;
         
         let t = 1 - 0.17 * Math.cos(H_dash_bar - toRad(30)) + 0.24 * Math.cos(2 * H_dash_bar) + 0.32 * Math.cos(3 * H_dash_bar + toRad(6)) - 0.20 * Math.cos(4 * H_dash_bar - toRad(63));
 
@@ -248,15 +246,6 @@ class Colour {
         let d_theta = toRad(30) * Math.exp(-1 * Math.pow((H_dash_bar - toRad(275)) / toRad(25), 2)) ;
         let rT = -1 * r_C * Math.sin(2 * d_theta);
         let dE00 = Math.pow(dL_dash / (kL * sL), 2) + Math.pow(dC_dash / (kC * sC), 2) + Math.pow(dH_dash / (kH * sH), 2) + (rT * dC_dash * dH_dash / (kC * sC * kH * sH));
-        
-        /*
-        console.log([dL_dash / (kL * sL), dC_dash / (kC * sC), dH_dash / (kH * sH)]);
-        console.log([sL, sC, sH]);
-        console.log([dL_dash, dC_dash, dH_dash]);
-        console.log([dh_dash * 180 / Math.PI, t, H_dash_bar]);
-        //console.log([h_dash1 * 180 / Math.PI, h_dash2 * 180 / Math.PI]);
-        console.log('');
-        */
 
         dE00 = Math.sqrt(dE00);
 
@@ -418,8 +407,6 @@ class Game {
 
         document.getElementById('total-moves').innerText = (this.mode === 'hard') ? `${this.num_guesses}/${this.max_guesses} Guesses` : `${this.num_guesses} Guesses`;
 
-        // Get guess score
-
         // Display current guess
         document.getElementById("score").innerText = Math.round(this.current_score * 100) / 100; // rounded to 2dp
 
@@ -427,18 +414,12 @@ class Game {
             this.newBestScore();
         }
 
-        // Check if it's correct
-        let correct = this.isCorrectGuess();
-        if (correct) { // not technically needed to be done this way but it's good code practice
-            this.win();
-            return;
-        }
-
         // Add current guess to previous guesses list
         this.previous_guesses[this.current_score] = this.current_guess;
 
         // If the guess is within the boundary you still win.
-        if (this.current_score > 100 - this.jnd) {
+        let correct = this.isCorrectGuess();
+        if ( correct || this.current_score > (100 - this.jnd) ) {
             this.win();
             return;
         }

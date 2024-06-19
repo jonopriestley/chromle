@@ -102,7 +102,9 @@ window.onresize = function() {
 /* Initialise the day */
 const now = new Date();
 const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
-document.getElementById('day-number').innerText = `Day ${day}`;
+let txt = `Day ${day}`;
+document.getElementById('day-number').innerText = txt;
+document.getElementById('day-number').style.marginRight = `${50 - (txt.length - 5) * 15}px`
 /* ----------------------------------------------------------- */
 
 /* Input slider */
