@@ -668,21 +668,21 @@ class App {
         document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
         document.querySelector(':root').style.setProperty('--button-font-size', `${(screen.width < screen.height) ? 26 : 10}pt`);
         document.body.style.setProperty('font-size', `${(screen.width < screen.height) ? 200 : 100}%`);
+        let svgs = document.getElementsByClassName('game-icon');
 
         // Remove wheel for phones
         if (window.innerWidth < window.innerHeight) {
             document.getElementById('colour-picker').style.marginTop = '50px';
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
-            document.getElementById('logo').style.height = '63px';
-            document.getElementById('day-number').style.fontSize = '28pt';
+            document.getElementById('logo').style.height = '67px';
+            document.getElementById('day-number').style.fontSize = '30pt';
             for (let i = 0; i < svgs.length; i++) {
-                svgs[i].style.height = '50px';
-                svgs[i].style.width = '50px';
+                svgs[i].style.height = '55px';
+                svgs[i].style.width = '55px';
             }
         } else {
             document.getElementById('colour-picker').style.marginTop = '10px';
-            let svgs = document.getElementsByClassName('game-icon');
             document.getElementById('logo').style.height = '40px';
             document.getElementById('day-number').style.fontSize = '20pt';
             for (let i = 0; i < svgs.length; i++) {
