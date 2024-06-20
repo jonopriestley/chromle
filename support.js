@@ -23,10 +23,6 @@ document.addEventListener('keyup', function(e) {
 });
 /* ----------------------------------------------------------- */
 
-
-
-/* ----------------------------------------------------------- */
-
 /* Open tutorial when the window is loaded */
 window.onload = function() {
   app.onLoad();

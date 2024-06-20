@@ -515,6 +515,8 @@ class App {
         
         this.initialised = false;
         this.is_phone = (screen.height > screen.width);
+        this.innerWidth = window.innerWidth;
+        this.innerHeight = window.innerHeight;
         this.newGame();
     }
 
@@ -668,8 +670,6 @@ class App {
         this.resize();
         this.openTutorial();
 
-        document.getElementById('colour').innerHTML += ' -onloadtest-';
-
         /* Initialise the day */
         const now = new Date();
         const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
@@ -715,9 +715,13 @@ class App {
     }
 
     resize() {
-        document.getElementById('colour').innerHTML += ' -resizetest-';
-        if (screen.width < screen.height) this.is_phone = true;
-        let min_dimension = (this.is_phone) ? Math.round(window.innerWidth / 1.5) : Math.round(window.innerHeight / 3.5);
+        if (screen.width < screen.height && !this.is_phone) {
+            this.is_phone = true;
+            this.innerWidth = window.innerWidth;
+            this.innerHeight = window.innerHeight;
+        }
+        
+        let min_dimension = (this.is_phone) ? Math.round(this.innerWidth / 1.5) : Math.round(this.innerHeight / 3.5);
         
         document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
 
@@ -725,9 +729,9 @@ class App {
         document.body.style.setProperty('font-size', `${(screen.height > screen.width) ? 200 : 100}%`);
         
         let size_comp = (window.innerHeight > window.innerWidth); // is the height > width
-        let [marg_top_cp, h_logo, fsize_day, pad_day, dim_svg, pad_but, rad_but] = (size_comp) ?
-            ['50px', '67px', '30pt', '8px', '55px', '16px 30px', '40px'] :
-            ['10px', '40px', '20pt', '5px', '32px', '8px 15px', '20px'];
+        let [marg_top_cp, h_logo, fsize_day, pad_day, dim_svg, pad_but, rad_but, dim_rect] = (size_comp) ?
+            ['50px', '67px', '30pt', '8px', '55px', '16px 30px', '40px', '100px'] :
+            ['10px', '40px', '20pt', '5px', '32px', '8px 15px', '20px', '50px'];
 
         // Phones remove wheel
         if (size_comp) {
@@ -739,6 +743,11 @@ class App {
         document.getElementById('logo').style.height = h_logo;
         document.getElementById('day-number').style.fontSize = fsize_day;
         document.getElementById('day-number').style.padding = pad_day;
+        
+        document.getElementById('best-guess-rectangle').style.height = dim_rect;
+        document.getElementById('best-guess-rectangle').style.width = dim_rect;
+        document.getElementById('best-guess-svg').style.height = dim_rect;
+        document.getElementById('best-guess-svg').style.width = dim_rect;
 
         let svgs = document.getElementsByClassName('game-icon');
         for (let i = 0; i < svgs.length; i++) {
