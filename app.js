@@ -514,7 +514,7 @@ class App {
         this.prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
         
         this.initialised = false;
-        this.is_phone = false;
+        this.is_phone = (screen.height > screen.width);
         this.newGame();
     }
 
@@ -668,6 +668,8 @@ class App {
         this.resize();
         this.openTutorial();
 
+        document.getElementById('colour').innerHTML += ' -onloadtest-';
+
         /* Initialise the day */
         const now = new Date();
         const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
@@ -713,6 +715,7 @@ class App {
     }
 
     resize() {
+        document.getElementById('colour').innerHTML += ' -resizetest-';
         if (screen.width < screen.height) this.is_phone = true;
         let min_dimension = (this.is_phone) ? Math.round(window.innerWidth / 1.5) : Math.round(window.innerHeight / 3.5);
         
