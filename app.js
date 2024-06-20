@@ -664,6 +664,54 @@ class App {
         document.getElementById('settings-ui').dataset.reveal = '0';
     }
 
+    onLoad() {
+        this.resize();
+        this.openTutorial();
+
+        /* Initialise the day */
+        const now = new Date();
+        const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
+        let txt = `Day ${day}`;
+        document.getElementById('day-number').innerText = txt;
+        document.getElementById('day-number').style.marginRight = `${60 - (txt.length - 5) * 15}px`;
+
+        /* Colour picker = Colour wheel */
+        document.addEventListener('input', function() {
+        document.getElementById('colour').innerText = document.getElementById('colour-picker-input').value;
+        });
+
+        /* Buttons  */
+        const buttons = document.getElementsByClassName('button');
+
+        // Button mouse down
+        for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('mousedown', event => {
+            buttons[i].style.backgroundColor = '#bbb';
+        });
+        }
+
+        // Button mouse leave
+        for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('mouseup', event => {
+            buttons[i].style.backgroundColor = '#ddd';
+        });
+        }
+
+        // Button mouse enter
+        for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('mouseenter', event => {
+            buttons[i].style.backgroundColor = '#ddd';
+        });
+        }
+
+        // Button mouse leave
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener('mouseleave', event => {
+            buttons[i].style.backgroundColor = '#fff';
+            });
+        }
+    }
+
     resize() {
         if (screen.width < screen.height) this.is_phone = true;
         let min_dimension = (this.is_phone) ? Math.round(window.innerWidth / 1.5) : Math.round(window.innerHeight / 3.5);
@@ -705,4 +753,3 @@ class App {
 }
 
 let app = new App();
-

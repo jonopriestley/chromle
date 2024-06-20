@@ -1,8 +1,8 @@
 
 /*  Colour wheel eye dropper */
-const eye = new EyeDropper();
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('colour-wheel').addEventListener('mousedown', function() {
+    const eye = new EyeDropper();
     eye.open().then(function(result) {
       document.getElementById('colour').innerText = result.sRGBHex;
       document.getElementById('colour-picker-input').value = result.sRGBHex;
@@ -11,10 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-/* Colour picker = Colour wheel */
-document.addEventListener('input', function() {
-  document.getElementById('colour').innerText = document.getElementById('colour-picker-input').value;
-});
 /* ----------------------------------------------------------- */
 
 /* Key commands  */
@@ -27,45 +23,14 @@ document.addEventListener('keyup', function(e) {
 });
 /* ----------------------------------------------------------- */
 
-/* Buttons  */
-const buttons = document.getElementsByClassName('button');
 
-// Button mouse down
-for (let i = 0; i < buttons.length; i++) {
-  buttons[i].addEventListener('mousedown', event => {
-    buttons[i].style.backgroundColor = '#bbb';
-  });
-}
-
-// Button mouse leave
-for (let i = 0; i < buttons.length; i++) {
-  buttons[i].addEventListener('mouseup', event => {
-    buttons[i].style.backgroundColor = '#ddd';
-  });
-}
-
-// Button mouse enter
-for (let i = 0; i < buttons.length; i++) {
-  buttons[i].addEventListener('mouseenter', event => {
-    buttons[i].style.backgroundColor = '#ddd';
-  });
-}
-
-// Button mouse leave
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('mouseleave', event => {
-      buttons[i].style.backgroundColor = '#fff';
-    });
-}
 
 /* ----------------------------------------------------------- */
 
 /* Open tutorial when the window is loaded */
 window.onload = function() {
-  app.resize();
-  app.openTutorial();
+  app.onLoad();
 }
-document.getElementById('colour').innerHTML += ' test';
 
 window.onresize = function() {
   app.resize();
@@ -73,13 +38,6 @@ window.onresize = function() {
 
 /* ----------------------------------------------------------- */
 
-/* Initialise the day */
-const now = new Date();
-const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
-let txt = `Day ${day}`;
-document.getElementById('day-number').innerText = txt;
-document.getElementById('day-number').style.marginRight = `${60 - (txt.length - 5) * 15}px`
-/* ----------------------------------------------------------- */
 
 /* Input slider */
 const rangeInput = document.getElementById("lightness");
