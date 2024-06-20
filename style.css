@@ -156,9 +156,9 @@ path {
 }
 
 #colour-picker-input {
-  width: calc(var(--wheel-diameter));
+  width: calc(var(--wheel-diameter) * 2);
   height: calc(var(--wheel-diameter) / 3);
-  border-radius: 5px;width: calc(var(--wheel-diameter));
+  border-radius: 5px;
   /*border: 10px solid red;*/
   border-color: transparent;
   background-color: white;
@@ -216,14 +216,6 @@ path {
   max-height: var(--wheel-size);
 }
 
-.wheel-slider {
-  display: flex;
-  justify-content: center;
-  opacity: var(--wheel-opacity);
-  max-width: var(--wheel-size);
-  max-height: var(--wheel-size);
-}
-
 .circle-guess {
   display: flex;
   justify-content: center;
@@ -252,10 +244,18 @@ path {
   padding-top: 5px;
 }
 
+.wheel-slider {
+  display: flex;
+  justify-content: center;
+  opacity: var(--wheel-opacity);
+  max-width: var(--wheel-size);
+  max-height: var(--wheel-size);
+}
+
 .c-range {
   position: relative;
   margin-bottom: 10px;
-  width: calc(var(--wheel-diameter) / 1.3);
+  width: calc(var(--wheel-diameter) * 1.75); /*calc(var(--wheel-diameter) / 1.3)*/
   /*max-width: var(--wheel-diameter);*/
   padding: 12px 24px;
   background-color: var(--bg-secondary);
@@ -305,7 +305,7 @@ path {
 .c-range__output {
   opacity: 0%;
   position: absolute;
-  left: calc((var(--lightness) - 2.6) / 100 * 95%);
+  left: calc((var(--lightness) - 1.1) / 100 * 97.2%);
   transform: translate(calc((var(--lightness) / 100) * -50%), 0);
   width: calc(var(--thumb-diameter) * 1.2px);
   top: 35px;

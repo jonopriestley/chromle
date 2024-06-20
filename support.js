@@ -1,7 +1,7 @@
 
 /*  Colour wheel eye dropper */
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('colour-wheel').addEventListener('mousedown', function() {
+  document.getElementById('colour-wheel').addEventListener('click', function() {
     const eye = new EyeDropper();
     eye.open().then(function(result) {
       document.getElementById('colour').innerText = result.sRGBHex;

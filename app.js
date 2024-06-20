@@ -737,13 +737,15 @@ class App {
         if (size_comp) {
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
+            document.getElementById('tutorial-text-wheel').remove();
+            document.getElementById('tutorial-text-slider').remove();
         }
 
         document.getElementById('colour-picker').style.marginTop = marg_top_cp;
         document.getElementById('logo').style.height = h_logo;
         document.getElementById('day-number').style.fontSize = fsize_day;
         document.getElementById('day-number').style.padding = pad_day;
-        
+
         document.getElementById('best-guess-rectangle').style.height = dim_rect;
         document.getElementById('best-guess-rectangle').style.width = dim_rect;
         document.getElementById('best-guess-svg').style.height = dim_rect;
