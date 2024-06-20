@@ -89,8 +89,9 @@ for (let i = 0; i < buttons.length; i++) {
 
 /* Open tutorial when the window is loaded */
 window.onload = function() {
-  app.openTutorial();
   app.resize();
+  app.openTutorial();
+  document.getElementById('colour').innerHTML += ' test';
 }
 
 window.onresize = function() {
