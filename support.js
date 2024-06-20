@@ -10,33 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-/* ----------------------------------------------------------- */
-
-/* Element sizes for phone vs computer */
-/*
-document.addEventListener('resize', function() {
-  let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
-  document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
-  document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 30 : 10}pt`);
-  document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
-});
-
-
-// Set wheel and picker sizes to bigger for phones
-let min_dimension = (window.innerWidth < window.innerHeight) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
-document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
-document.querySelector(':root').style.setProperty('--button-font-size', `${(window.innerWidth < window.innerHeight) ? 26 : 10}pt`);
-document.body.style.setProperty('font-size', `${(window.innerWidth < window.innerHeight) ? 200 : 100}%`);
-*/
-/*
-// Remove wheel for phones
-if (screen.width < screen.height) {
-  document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
-  document.querySelector(':root').style.setProperty('--wheel-size', '0');
-}
-*/
-
-/* ----------------------------------------------------------- */
 
 /* Colour picker = Colour wheel */
 document.addEventListener('input', function() {
@@ -91,8 +64,8 @@ for (let i = 0; i < buttons.length; i++) {
 window.onload = function() {
   app.resize();
   app.openTutorial();
-  document.getElementById('colour').innerHTML += ' test';
 }
+document.getElementById('colour').innerHTML += ' test';
 
 window.onresize = function() {
   app.resize();
