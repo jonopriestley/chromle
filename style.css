@@ -60,14 +60,14 @@ p {
 
 .button {
   font-size: var(--button-font-size);
+  padding: 8px 15px;
+  border-radius: 20px;
 }
 
 #guess-button {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
   justify-self: center;
 }
 
@@ -84,8 +84,8 @@ path {
   background-color: transparent;
   border: 0;
   float: right;
-  margin-left: 6px;
-  margin-right: 6px;
+  margin-left: 8px;
+  margin-right: 8px;
   margin-top: 6px;
   padding: 0;
 }
@@ -94,8 +94,6 @@ path {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
 }
 
 .game-icon {
@@ -109,7 +107,6 @@ path {
   margin-right: 5px;
   position: relative;
   width: fit-content;
-  font-size: var(--button-font-size);
   margin-top: 4px;
 }
 
@@ -131,7 +128,7 @@ path {
 
 .day-number {
   padding: 5px;
-  margin-right: 50px;
+  margin-right: 60px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20pt;
   position: relative;
@@ -433,8 +430,6 @@ path {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
 }
 
 .tutorial-image {
@@ -534,8 +529,6 @@ path {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
 }
 
 
@@ -617,15 +610,11 @@ path {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
 }
 
 #mode-button {
   color: #000;
   background-color: #fff;
   border: 1px solid #434343;
-  border-radius: 20px;
-  padding: 8px 15px;
   margin-left: 5px;
 }

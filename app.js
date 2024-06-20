@@ -514,6 +514,7 @@ class App {
         this.prng = this.pseudoRNGSeeded(day); // seeded pseudo random number generator function
         
         this.initialised = false;
+        this.is_phone = false;
         this.newGame();
     }
 
@@ -664,32 +665,42 @@ class App {
     }
 
     resize() {
-        let min_dimension = (screen.width < screen.height) ? Math.round(window.innerWidth / 1.5): Math.round(window.innerHeight / 3.5);
+        if (screen.width < screen.height) this.is_phone = true;
+        let min_dimension = (this.is_phone) ? Math.round(window.innerWidth / 1.5) : Math.round(window.innerHeight / 3.5);
+        
         document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
-        document.querySelector(':root').style.setProperty('--button-font-size', `${(screen.width < screen.height) ? 26 : 10}pt`);
-        document.body.style.setProperty('font-size', `${(screen.width < screen.height) ? 200 : 100}%`);
-        let svgs = document.getElementsByClassName('game-icon');
 
-        // Remove wheel for phones
-        if (window.innerWidth < window.innerHeight) {
-            document.getElementById('colour-picker').style.marginTop = '50px';
+        document.querySelector(':root').style.setProperty('--button-font-size', `${(screen.height > screen.width) ? 26 : 10}pt`);
+        document.body.style.setProperty('font-size', `${(screen.height > screen.width) ? 200 : 100}%`);
+        
+        let size_comp = (window.innerHeight > window.innerWidth); // is the height > width
+        let [marg_top_cp, h_logo, fsize_day, pad_day, dim_svg, pad_but, rad_but] = (size_comp) ?
+            ['50px', '67px', '30pt', '8px', '55px', '16px 30px', '40px'] :
+            ['10px', '40px', '20pt', '5px', '32px', '8px 15px', '20px'];
+
+        // Phones remove wheel
+        if (size_comp) {
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
-            document.getElementById('logo').style.height = '67px';
-            document.getElementById('day-number').style.fontSize = '30pt';
-            for (let i = 0; i < svgs.length; i++) {
-                svgs[i].style.height = '55px';
-                svgs[i].style.width = '55px';
-            }
-        } else {
-            document.getElementById('colour-picker').style.marginTop = '10px';
-            document.getElementById('logo').style.height = '40px';
-            document.getElementById('day-number').style.fontSize = '20pt';
-            for (let i = 0; i < svgs.length; i++) {
-                svgs[i].style.height = '32px';
-                svgs[i].style.width = '32px';
-            }
         }
+
+        document.getElementById('colour-picker').style.marginTop = marg_top_cp;
+        document.getElementById('logo').style.height = h_logo;
+        document.getElementById('day-number').style.fontSize = fsize_day;
+        document.getElementById('day-number').style.padding = pad_day;
+
+        let svgs = document.getElementsByClassName('game-icon');
+        for (let i = 0; i < svgs.length; i++) {
+            svgs[i].style.height = dim_svg;
+            svgs[i].style.width = dim_svg;
+        }
+
+        let buttons = document.getElementsByClassName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].style.padding = pad_but;
+            buttons[i].style.borderRadius = rad_but;
+        }
+        
     }
 }
 

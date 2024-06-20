@@ -104,7 +104,7 @@ const now = new Date();
 const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60 * 1000) / 86400000) - 19890; // number of days of this website
 let txt = `Day ${day}`;
 document.getElementById('day-number').innerText = txt;
-document.getElementById('day-number').style.marginRight = `${50 - (txt.length - 5) * 15}px`
+document.getElementById('day-number').style.marginRight = `${60 - (txt.length - 5) * 15}px`
 /* ----------------------------------------------------------- */
 
 /* Input slider */
