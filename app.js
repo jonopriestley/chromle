@@ -715,26 +715,26 @@ class App {
     }
 
     resize() {
-        if (screen.width < screen.height && !this.is_phone) {
+        if (screen.height > screen.width && !this.is_phone) {
             this.is_phone = true;
             this.innerWidth = window.innerWidth;
             this.innerHeight = window.innerHeight;
         }
         
-        let min_dimension = (this.is_phone) ? Math.round(this.innerWidth / 1.5) : Math.round(this.innerHeight / 3.5);
-        
-        document.querySelector(':root').style.setProperty('--wheel-diameter', `${min_dimension}px`);
+        //let wheel_diameter = (this.is_phone) ? Math.round(this.innerWidth / 3) : Math.round(this.innerHeight / 3.5);
+        //document.querySelector(':root').style.setProperty('--wheel-diameter', `${wheel_diameter}px`);
+        document.querySelector(':root').style.setProperty('--picker-height-scalar', `${(this.is_phone) ? 2 : 0.33}`);
 
         document.querySelector(':root').style.setProperty('--button-font-size', `${(screen.height > screen.width) ? 26 : 10}pt`);
         document.body.style.setProperty('font-size', `${(screen.height > screen.width) ? 200 : 100}%`);
         
-        let size_comp = (window.innerHeight > window.innerWidth); // is the height > width
-        let [marg_top_cp, h_logo, fsize_day, pad_day, dim_svg, pad_but, rad_but, dim_rect] = (size_comp) ?
+        //let size_comp = (window.innerHeight > window.innerWidth); // is the height > width
+        let [marg_top_cp, h_logo, fsize_day, pad_day, dim_svg, pad_but, rad_but, dim_rect] = (this.is_phone) ?
             ['50px', '67px', '30pt', '8px', '55px', '16px 30px', '40px', '100px'] :
             ['10px', '40px', '20pt', '5px', '32px', '8px 15px', '20px', '50px'];
 
         // Phones remove wheel
-        if (size_comp) {
+        if (this.is_phone) {
             document.querySelector(':root').style.setProperty('--wheel-opacity', '0');
             document.querySelector(':root').style.setProperty('--wheel-size', '0');
             document.getElementById('tutorial-text-wheel').remove();

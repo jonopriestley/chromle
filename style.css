@@ -20,6 +20,7 @@
   --button-font-size: 10pt;
   --wheel-opacity: 1;
   --wheel-size: 100%;
+  --picker-height-scalar: 0.33;
 
   /* fonts */
   --alpha-font-family: "IBM Plex Mono", monospace;
@@ -157,9 +158,8 @@ path {
 
 #colour-picker-input {
   width: calc(var(--wheel-diameter) * 2);
-  height: calc(var(--wheel-diameter) / 3);
+  height: calc(var(--wheel-diameter) * var(--picker-height-scalar));
   border-radius: 5px;
-  /*border: 10px solid red;*/
   border-color: transparent;
   background-color: white;
 }
