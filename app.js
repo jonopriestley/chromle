@@ -521,7 +521,7 @@ class App {
     }
 
     newGame() {
-        if (!this.initialised) this.initialised = true;
+        if (!this.initialised) this.initialised = true; // do nothing the first time until initialised
         else if (!this.game.won) return;
         else this.emptySettings();  
         /* 
@@ -537,9 +537,10 @@ class App {
     emptySettings() {
         document.querySelector(':root').style.setProperty('--colour-slider', "hsla(160, 95.2%, 32.4%, 0.75)");
         document.querySelector(':root').style.setProperty('--best-guess', 'var(--bg-secondary)');
+        document.querySelector(':root').style.setProperty('--lightness', '50');
+        document.getElementById('lightness').value = '50';
         document.getElementById('colour-picker-input').value = '#808080';
         document.getElementById('colour').innerText = '#808080';
-        document.getElementById('lightness').value = '50';
         document.getElementById('moves-box').style.maxHeight = '50px'; // make box visible again
         document.getElementById('total-moves').value = '';
         document.getElementById('win-box').style.maxHeight = '0px'; // make box nothing again
